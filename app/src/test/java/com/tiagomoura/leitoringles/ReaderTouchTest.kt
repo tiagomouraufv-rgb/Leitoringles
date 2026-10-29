@@ -26,7 +26,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [34, 35], qualifiers = "w411dp-h891dp-xxhdpi")
-class ReaderTouchTest {
+open class ReaderTouchTest {
     @get:Rule
     val rule = createAndroidComposeRule<MainActivity>()
 
@@ -81,7 +81,7 @@ class ReaderTouchTest {
             rule.onRoot().performTouchInput { click(centreOf(r)) }
             rule.waitForIdle()
             val got = tappedWord()
-            println("$label: touched '$expected' at ${centreOf(r)} -> '$got' (old maths: '${ReaderProbe.oldMathWord}')")
+            println("$label: touched '$expected' at ${centreOf(r)} -> '$got'")
             assertEquals("$label: touched '$expected'", expected, got)
             ok++
             rule.onNodeWithText("Fechar").performClick()
@@ -149,3 +149,7 @@ class ReaderTouchTest {
         assertEquals(b, sel.last)
     }
 }
+
+/** Same checks on a narrower phone with a large system font, like the phone in the bug report. */
+@Config(sdk = [34, 35], qualifiers = "w360dp-h780dp-xxhdpi", fontScale = 1.3f)
+class ReaderTouchLargeFontTest : ReaderTouchTest()

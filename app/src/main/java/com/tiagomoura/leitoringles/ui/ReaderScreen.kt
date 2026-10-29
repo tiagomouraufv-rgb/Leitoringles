@@ -98,8 +98,6 @@ internal class PageHolder {
 internal object ReaderProbe {
     var holder: PageHolder? = null
     var lastTap: TapTarget? = null
-    /** Word found with the previous (manual) coordinate maths, for comparison in tests. */
-    var oldMathWord: String? = null
     var selection: IntRange? = null
     var selectionDone: Boolean = false
     var page: Int = 0
@@ -263,35 +261,35 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
 
         val pageNow = page.coerceIn(0, pages.count - 1)
 
-        /** Converts a touch (in the coordinates of the whole reader) into the coordinates of the page text. */
-        fun textLocal(pos: Offset): Offset? {
-            val o = holder.outer ?: return null
-            val t = holder.text ?: return null
-            if (!o.isAttached || !t.isAttached) return null
-            return t.localPositionOf(o, pos)
-        }
+        // All positions below are in the coordinates of the page text itself: the gestures are
+        // attached directly to the text (like ClickableText), so Compose gives local positions.
 
-        /** Finds the word under a point of the screen. */
-        fun hitTest(pos: Offset): TapTarget? {
+        /** Finds the word at a point of the page text. */
+        fun hitTest(p: Offset): TapTarget? {
             val lay = holder.layout ?: return null
-            val p = textLocal(pos) ?: return null
             val w = lay.size.width.toFloat()
             val h = lay.size.height.toFloat()
-            if (p.y < 0f || p.y > h || p.x < -8f || p.x > w + 8f) return null
-            val off = lay.getOffsetForPosition(Offset(p.x.coerceIn(0f, w), p.y))
+            if (p.y < 0f || p.y > h || p.x < 0f || p.x > w) return null
+            val off = lay.getOffsetForPosition(p)
             val inChapter = holder.start + off - holder.base
             if (inChapter < 0) return null
             val txt = book.chapters[chapterIndex].text
             val r = TextTools.wordAt(txt, inChapter)
                 ?: TextTools.wordAt(txt, (inChapter - 1).coerceAtLeast(0))
                 ?: return null
+            // the finger must really be on the word, not in the empty space after a short line
+            val ps = r.first + holder.base - holder.start
+            val pe = r.last + holder.base - holder.start
+            if (ps >= 0 && pe < lay.layoutInput.text.length) {
+                val box = lay.getBoundingBox(ps).let { a -> a.copy(right = lay.getBoundingBox(pe).right) }
+                if (p.x < box.left - 24f || p.x > box.right + 24f) return null
+            }
             return TapTarget(chapterIndex, r.first, r.last + 1, inChapter)
         }
 
-        /** Chapter offset under a point, clamped to the text of the current page. */
-        fun offsetAt(pos: Offset): Int {
+        /** Chapter offset at a point of the page text, clamped to the page. */
+        fun offsetAt(p: Offset): Int {
             val lay = holder.layout ?: return 0
-            val p = textLocal(pos) ?: return 0
             val w = lay.size.width.toFloat()
             val h = lay.size.height.toFloat()
             val off = lay.getOffsetForPosition(Offset(p.x.coerceIn(0f, w), p.y.coerceIn(1f, (h - 1f).coerceAtLeast(1f))))
@@ -343,36 +341,37 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             selDone = true
         }
 
-        /** The previous version's hit test (manual maths), kept only to compare in tests. */
-        fun oldMathWord(pos: Offset): String? {
-            val yIn = pos.y - topPx + pages.top(pageNow)
-            val xIn = (pos.x - marginPx).coerceIn(0f, widthPx)
-            val off = pages.layout.getOffsetForPosition(Offset(xIn, yIn)) - pages.base
-            val txt = book.chapters[chapterIndex].text
-            if (off < 0) return null
-            val r = TextTools.wordAt(txt, off) ?: return null
-            return txt.substring(r.first, r.last + 1)
+        /** A tap outside the text (margins): left side goes back, right side forward, middle opens the menu. */
+        fun handleTap(pos: Offset, long: Boolean) {
+            if (longFired) { longFired = false; return }
+            if (panel.isNotEmpty() || tap != null || selDone || long) return
+            when {
+                pos.x < screenW * 0.35f -> prev()
+                pos.x > screenW * 0.65f -> next()
+                else -> panel = "menu"
+            }
         }
 
-        fun handleTap(pos: Offset, long: Boolean) {
-            ReaderProbe.oldMathWord = oldMathWord(pos)
+        /** A tap on the page text. */
+        fun handleTextTap(p: Offset) {
             if (longFired) { longFired = false; return }
             if (panel.isNotEmpty() || tap != null || selDone) return
-            if (settings.tapTurnsPage && !long) {
-                if (pos.x < screenW * 0.35f) prev() else next()
+            val w = (holder.layout?.size?.width ?: 1).toFloat()
+            if (settings.tapTurnsPage) {
+                if (p.x < w * 0.35f) prev() else next()
                 return
             }
-            val hit = hitTest(pos)
+            val hit = hitTest(p)
             when {
                 hit != null -> { tap = hit; ReaderProbe.lastTap = hit }
-                long -> {}
-                pos.x < screenW * 0.25f -> prev()
-                pos.x > screenW * 0.75f -> next()
+                p.x < w * 0.25f -> prev()
+                p.x > w * 0.75f -> next()
                 else -> panel = "menu"
             }
         }
 
         val tapState = rememberUpdatedState(::handleTap)
+        val textTapState = rememberUpdatedState(::handleTextTap)
         val longStartState = rememberUpdatedState(::longStart)
         val longMoveState = rememberUpdatedState(::longMove)
         val longEndState = rememberUpdatedState(::longEnd)
@@ -432,14 +431,6 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                         },
                     )
                 }
-                .pointerInput(Unit) {
-                    detectDragGesturesAfterLongPress(
-                        onDragStart = { longStartState.value(it) },
-                        onDrag = { change, _ -> change.consume(); longMoveState.value(change.position) },
-                        onDragEnd = { longEndState.value() },
-                        onDragCancel = { longEndState.value() },
-                    )
-                }
         ) {
             BasicText(
                 text = pageText,
@@ -453,8 +444,15 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                     }
                     .clipToBounds()
                     .drawBehind {
-                        val r = sel
                         val lay = holder.layout
+                        val t = tap
+                        if (t != null && lay != null && t.chapter == chapterIndex) {
+                            val len = pageText.length
+                            val a = (pages.base + t.start - pageStart).coerceIn(0, len)
+                            val b = (pages.base + t.end - pageStart).coerceIn(0, len)
+                            if (b > a) drawPath(lay.getPathForRange(a, b), selColor)
+                        }
+                        val r = sel
                         if (r != null && lay != null && r.last >= r.first) {
                             val len = pageText.length
                             val a = (pages.base + r.first - pageStart).coerceIn(0, len)
@@ -462,7 +460,21 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                             if (b > a) drawPath(lay.getPathForRange(a, b), selColor)
                         }
                     }
-                    .onGloballyPositioned { holder.text = it },
+                    .onGloballyPositioned { holder.text = it }
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { longFired = false },
+                            onTap = { textTapState.value(it) },
+                        )
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = { longStartState.value(it) },
+                            onDrag = { change, _ -> change.consume(); longMoveState.value(change.position) },
+                            onDragEnd = { longEndState.value() },
+                            onDragCancel = { longEndState.value() },
+                        )
+                    },
             )
         }
 
