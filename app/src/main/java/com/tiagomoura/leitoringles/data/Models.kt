@@ -81,7 +81,7 @@ fun splitSentences(text: String): List<IntRange> {
         val end = m.range.last + 1
         if (text[m.range.first] == '.') {
             val w = Regex("([A-Za-z]+)\\.$").find(text.substring(start, m.range.first + 1))?.groupValues?.get(1)
-            if (w != null && (w in setOf("Mr", "Mrs", "Dr", "St", "Prof", "Mt", "No", "Capt", "Mme", "Mlle", "M") || (w.length == 1 && w[0].isUpperCase()))) continue
+            if (w != null && (w in setOf("Mr", "Mrs", "Dr", "St", "Prof", "Mt", "No", "Capt", "Mme", "Mlle", "M", "Hon") || (w.length == 1 && w[0].isUpperCase()))) continue
         }
         if (text.substring(start, end).isNotBlank()) out.add(start until end)
         start = end

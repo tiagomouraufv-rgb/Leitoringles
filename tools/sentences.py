@@ -13,7 +13,7 @@ import json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(__file__))
 
-ABBR = {"Mr", "Mrs", "Dr", "St", "Prof", "Mt", "No", "Capt", "Mme", "Mlle", "M", "Messrs", "Jr", "Sr", "vs", "etc"}
+ABBR = {"Mr", "Mrs", "Dr", "St", "Prof", "Mt", "No", "Capt", "Mme", "Mlle", "M", "Messrs", "Hon", "Jr", "Sr", "vs", "etc"}
 SPLIT = re.compile(r"[.!?…]+[\"”’')\]]*(?=\s+[\"“‘'(\[—–]*[A-Z0-9])")
 
 
