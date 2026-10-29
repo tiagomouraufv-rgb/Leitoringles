@@ -37,8 +37,8 @@ fun SettingsScreen(app: AppState) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp)) {
             Section("Leitura")
             StepRow("Tamanho da letra", "${s.fontSize}",
-                onMinus = { app.updateSettings(s.copy(fontSize = (s.fontSize - 1).coerceAtLeast(14))) },
-                onPlus = { app.updateSettings(s.copy(fontSize = (s.fontSize + 1).coerceAtMost(34))) })
+                onMinus = { app.updateSettings(s.copy(fontSize = (s.fontSize - 2).coerceAtLeast(14))) },
+                onPlus = { app.updateSettings(s.copy(fontSize = (s.fontSize + 2).coerceAtMost(48))) })
             StepRow("Espaço entre linhas", String.format("%.2f", s.lineSpacing),
                 onMinus = { app.updateSettings(s.copy(lineSpacing = (s.lineSpacing - 0.1f).coerceAtLeast(1.1f))) },
                 onPlus = { app.updateSettings(s.copy(lineSpacing = (s.lineSpacing + 0.1f).coerceAtMost(2.2f))) })

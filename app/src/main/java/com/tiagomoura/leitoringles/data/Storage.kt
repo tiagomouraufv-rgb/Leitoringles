@@ -79,6 +79,7 @@ class Storage(context: Context) {
             colorMode = o.optString("colorMode", d.colorMode),
             braveKey = o.optString("braveKey", ""),
             margin = o.optInt("margin", d.margin),
+            tapTurnsPage = o.optBoolean("tapTurnsPage", d.tapTurnsPage),
         )
     }
 
@@ -87,6 +88,7 @@ class Storage(context: Context) {
             .put("fontSize", s.fontSize).put("lineSpacing", s.lineSpacing.toDouble())
             .put("showMarks", s.showMarks).put("fullRefreshEvery", s.fullRefreshEvery)
             .put("colorMode", s.colorMode).put("braveKey", s.braveKey).put("margin", s.margin)
+            .put("tapTurnsPage", s.tapTurnsPage)
         writeAtomic(settingsFile, o.toString(2))
     }
 

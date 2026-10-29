@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.tiagomoura.leitoringles.AppState
 import com.tiagomoura.leitoringles.data.Book
 import com.tiagomoura.leitoringles.data.Entry
@@ -80,11 +79,9 @@ fun WordPopup(app: AppState, book: Book, t: TapTarget, onClose: () -> Unit, onGr
         }
     }
 
-    Dialog(onDismissRequest = onClose) {
+    run {
         Column(
-            Modifier.fillMaxWidth().heightIn(max = 640.dp)
-                .border(2.dp, Ink, RoundedCornerShape(8.dp)).background(Paper, RoundedCornerShape(8.dp))
-                .verticalScroll(rememberScrollState()).padding(18.dp)
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(18.dp)
         ) {
             for (e in expressions) {
                 Text(if (e.type == "phrasal") "Phrasal verb" else "Expressão", fontSize = 13.sp, color = Grey)

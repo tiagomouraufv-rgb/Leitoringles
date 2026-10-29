@@ -168,11 +168,12 @@ data class VocabItem(
 )
 
 data class Settings(
-    val fontSize: Int = 20,
+    val fontSize: Int = 24,
     val lineSpacing: Float = 1.45f,
     val showMarks: Boolean = true,
     val fullRefreshEvery: Int = 8,
     val colorMode: String = "auto", // auto, color, mono
     val braveKey: String = "",
     val margin: Int = 24,
+    val tapTurnsPage: Boolean = false,
 )

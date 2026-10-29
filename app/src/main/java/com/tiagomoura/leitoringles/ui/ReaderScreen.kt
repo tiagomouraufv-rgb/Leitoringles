@@ -5,8 +5,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -56,17 +58,16 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.tiagomoura.leitoringles.AppState
 import com.tiagomoura.leitoringles.Screen
 import com.tiagomoura.leitoringles.data.Book
 import com.tiagomoura.leitoringles.data.Chapter
 import kotlinx.coroutines.delay
-import kotlin.math.abs
 
 /** What the user tapped on a page. Offsets are inside the chapter text. */
 data class TapTarget(val chapter: Int, val start: Int, val end: Int, val offset: Int)
@@ -121,9 +122,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
     var anchor by remember(book) { mutableIntStateOf(target.offset ?: saved?.offset ?: 0) }
     var wantLastPage by remember(book) { mutableStateOf(false) }
     var page by remember(book) { mutableIntStateOf(0) }
-    var showMenu by remember { mutableStateOf(false) }
-    var showChapters by remember { mutableStateOf(false) }
-    var showFont by remember { mutableStateOf(false) }
+    var panel by remember { mutableStateOf("") } // "", "menu", "text", "parts"
     var tap by remember { mutableStateOf<TapTarget?>(null) }
     var flash by remember { mutableStateOf(false) }
     var turns by remember { mutableIntStateOf(0) }
@@ -142,12 +141,13 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
 
     BoxWithConstraints(Modifier.fillMaxSize().background(Paper)) {
         val marginPx = with(density) { settings.margin.dp.toPx() }
-        val topPx = with(density) { 28.dp.toPx() }
-        val bottomPx = with(density) { 30.dp.toPx() }
+        val topPx = with(density) { 52.dp.toPx() }
+        val bottomPx = with(density) { 52.dp.toPx() }
         val widthPx = constraints.maxWidth - 2 * marginPx
         val heightPx = constraints.maxHeight - topPx - bottomPx
+        val screenW = constraints.maxWidth.toFloat()
 
-        val pages = remember(chapterIndex, settings.fontSize, settings.lineSpacing, settings.showMarks, settings.margin, constraints.maxWidth, constraints.maxHeight, book, app.vocabulary.size) {
+        val pages = remember(chapterIndex, settings.fontSize, settings.lineSpacing, settings.showMarks, settings.margin, constraints.maxWidth, constraints.maxHeight, book) {
             val text = buildChapterText(book, chapterIndex, chapter, settings.showMarks, color)
             val style = TextStyle(
                 fontFamily = FontFamily.Serif,
@@ -175,7 +175,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             page = if (wantLastPage) pages.count - 1 else pages.pageOf(pages.base + anchor)
             wantLastPage = false
             anchor = (pages.startOffset(page) - pages.base).coerceAtLeast(0)
-            app.saveProgress(book.meta.id, chapterIndex, (pages.startOffset(page) - pages.base).coerceAtLeast(0))
+            app.saveProgress(book.meta.id, chapterIndex, anchor)
         }
 
         fun registerTurn() {
@@ -188,7 +188,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             page = newPage
             anchor = (pages.startOffset(page) - pages.base).coerceAtLeast(0)
             registerTurn()
-            app.saveProgress(book.meta.id, chapterIndex, (pages.startOffset(page) - pages.base).coerceAtLeast(0))
+            app.saveProgress(book.meta.id, chapterIndex, anchor)
         }
 
         fun next() {
@@ -205,6 +205,43 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             }
         }
 
+        val pageNow = page.coerceIn(0, pages.count - 1)
+
+        /** Finds the word under a point of the screen. */
+        fun hitTest(pos: Offset): TapTarget? {
+            val textY = pos.y - topPx
+            if (textY < 0) return null
+            val yIn = textY + pages.top(pageNow)
+            if (yIn > pages.bottom(pageNow)) return null
+            val xIn = pos.x - marginPx
+            if (xIn < -8f || xIn > widthPx + 8f) return null
+            val off = pages.layout.getOffsetForPosition(Offset(xIn.coerceIn(0f, widthPx), yIn))
+            val inChapter = off - pages.base
+            if (inChapter < 0) return null
+            val txt = book.chapters[chapterIndex].text
+            val r = TextTools.wordAt(txt, inChapter)
+                ?: TextTools.wordAt(txt, (inChapter - 1).coerceAtLeast(0))
+                ?: return null
+            return TapTarget(chapterIndex, r.first, r.last + 1, inChapter)
+        }
+
+        fun handleTap(pos: Offset, long: Boolean) {
+            if (panel.isNotEmpty() || tap != null) return
+            if (settings.tapTurnsPage && !long) {
+                if (pos.x < screenW * 0.35f) prev() else next()
+                return
+            }
+            val hit = hitTest(pos)
+            when {
+                hit != null -> tap = hit
+                long -> {}
+                pos.x < screenW * 0.25f -> prev()
+                pos.x > screenW * 0.75f -> next()
+                else -> panel = "menu"
+            }
+        }
+
+        val tapState = rememberUpdatedState(::handleTap)
         val nextState = rememberUpdatedState(::next)
         val prevState = rememberUpdatedState(::prev)
         DisposableEffect(Unit) {
@@ -220,55 +257,26 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             onDispose { app.keyHandler = null }
         }
 
-        val pageNow = page.coerceIn(0, pages.count - 1)
-        val pagesState = rememberUpdatedState(pages)
-        val pageState = rememberUpdatedState(pageNow)
-
+        val swipePx = with(density) { 70.dp.toPx() }
         Canvas(
-            Modifier.fillMaxSize().pointerInput(book, marginPx, topPx) {
-                awaitEachGesture {
-                    val down = awaitFirstDown()
-                    var last = down.position
-                    while (true) {
-                        val ev = awaitPointerEvent()
-                        val c = ev.changes.first()
-                        last = c.position
-                        if (!c.pressed) break
-                    }
-                    val dx = last.x - down.position.x
-                    val dy = last.y - down.position.y
-                    val swipe = 60.dp.toPx()
-                    val still = 24.dp.toPx()
-                    if (abs(dx) > swipe && abs(dx) > abs(dy)) {
-                        if (dx < 0) nextState.value() else prevState.value()
-                    } else if (abs(dx) < still && abs(dy) < still) {
-                        val x = down.position.x
-                        val w = size.width
-                        if (showMenu) {
-                            showMenu = false
-                        } else if (x < w * 0.18f) {
-                            prevState.value()
-                        } else if (x > w * 0.82f) {
-                            nextState.value()
-                        } else {
-                            val ps = pagesState.value
-                            val pg = pageState.value
-                            val yIn = down.position.y - topPx + ps.top(pg)
-                            val textY = down.position.y - topPx
-                            var hit: TapTarget? = null
-                            if (textY >= 0 && yIn <= ps.bottom(pg)) {
-                                val off = ps.layout.getOffsetForPosition(Offset(x - marginPx, yIn))
-                                val inChapter = off - ps.base
-                                if (inChapter >= 0) {
-                                    val r = TextTools.wordAt(book.chapters[chapterIndex].text, inChapter)
-                                    if (r != null) hit = TapTarget(chapterIndex, r.first, r.last + 1, inChapter)
-                                }
-                            }
-                            if (hit != null) tap = hit else showMenu = true
-                        }
-                    }
+            Modifier.fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { tapState.value(it, false) },
+                        onLongPress = { tapState.value(it, true) },
+                    )
                 }
-            }
+                .pointerInput(Unit) {
+                    var acc = 0f
+                    detectHorizontalDragGestures(
+                        onDragStart = { acc = 0f },
+                        onHorizontalDrag = { change, amount -> acc += amount; change.consume() },
+                        onDragEnd = {
+                            if (acc < -swipePx) nextState.value() else if (acc > swipePx) prevState.value()
+                            acc = 0f
+                        },
+                    )
+                }
         ) {
             val top = pages.top(pageNow)
             val bottom = pages.bottom(pageNow)
@@ -279,35 +287,69 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             }
         }
 
-        // footer: page and progress
-        val pct = book.meta.percent(chapterIndex, (pages.startOffset(pageNow) - pages.base).coerceAtLeast(0))
-        Row(
-            Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(28.dp).padding(horizontal = settings.margin.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(chapter.title, fontSize = 12.sp, color = Grey, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-            Text("  ${pageNow + 1}/${pages.count} · $pct%", fontSize = 12.sp, color = Grey)
+        // fixed top bar: always reachable, even if taps on the text fail
+        Column(Modifier.align(Alignment.TopCenter).fillMaxWidth().background(Paper)) {
+            Row(
+                Modifier.fillMaxWidth().height(50.dp).padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.height(50.dp).tap { app.screen = Screen.Library }.padding(horizontal = 10.dp), contentAlignment = Alignment.Center) {
+                    Text("‹ Biblioteca", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                }
+                Text(
+                    book.meta.title, fontSize = 15.sp, color = Grey, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f).padding(horizontal = 6.dp), textAlign = TextAlign.Center,
+                )
+                Box(Modifier.height(50.dp).tap { panel = if (panel == "text") "" else "text" }.padding(horizontal = 12.dp), contentAlignment = Alignment.Center) {
+                    Text("Aa", fontSize = 22.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
+                }
+                Box(Modifier.height(50.dp).tap { panel = if (panel == "menu") "" else "menu" }.padding(horizontal = 12.dp), contentAlignment = Alignment.Center) {
+                    Text("☰", fontSize = 24.sp)
+                }
+            }
+            Box(Modifier.fillMaxWidth().height(1.dp).background(LightGrey))
         }
 
-        if (showMenu) ReaderMenu(
-            app, book, chapterIndex, pageNow, pages.count, pct,
-            onClose = { showMenu = false },
-            onChapters = { showChapters = true; showMenu = false },
-            onFont = { showFont = true; showMenu = false },
-        )
-        if (flash) Box(Modifier.fillMaxSize().background(Ink))
-    }
+        // footer: page buttons and progress
+        val pct = book.meta.percent(chapterIndex, (pages.startOffset(pageNow) - pages.base).coerceAtLeast(0))
+        Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().background(Paper)) {
+            Box(Modifier.fillMaxWidth().height(1.dp).background(LightGrey))
+            Row(Modifier.fillMaxWidth().height(50.dp), verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.width(72.dp).height(50.dp).tap { prev() }, contentAlignment = Alignment.Center) {
+                    Text("‹", fontSize = 30.sp)
+                }
+                Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(chapter.title, fontSize = 12.sp, color = Grey, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text("página ${pageNow + 1} de ${pages.count} · $pct%", fontSize = 12.sp, color = Grey)
+                }
+                Box(Modifier.width(72.dp).height(50.dp).tap { next() }, contentAlignment = Alignment.Center) {
+                    Text("›", fontSize = 30.sp)
+                }
+            }
+        }
 
-    if (showChapters) ChaptersDialog(book, chapterIndex, onClose = { showChapters = false }) { i ->
-        chapterIndex = i; anchor = 0; showChapters = false
-    }
-    if (showFont) FontDialog(app, onClose = { showFont = false })
-    tap?.let { t ->
-        WordPopup(app, book, t, onClose = { tap = null }, onGrammar = { id ->
-            tap = null
-            app.grammarFocus = id
-            app.screen = Screen.Grammar
-        })
+        when (panel) {
+            "menu" -> Overlay(onClose = { panel = "" }) {
+                ReaderMenu(app, book, chapterIndex, pageNow, pages.count, pct,
+                    onParts = { panel = "parts" }, onText = { panel = "text" }, onClose = { panel = "" })
+            }
+            "text" -> Overlay(onClose = { panel = "" }) { TextSettings(app, onClose = { panel = "" }) }
+            "parts" -> Overlay(onClose = { panel = "" }) {
+                PartsList(book, chapterIndex, onClose = { panel = "" }) { i ->
+                    chapterIndex = i; anchor = 0; panel = ""
+                }
+            }
+        }
+        tap?.let { t ->
+            Overlay(onClose = { tap = null }) {
+                WordPopup(app, book, t, onClose = { tap = null }, onGrammar = { id ->
+                    tap = null
+                    app.grammarFocus = id
+                    app.screen = Screen.Grammar
+                })
+            }
+        }
+        if (flash) Box(Modifier.fillMaxSize().background(Ink))
     }
 }
 
@@ -356,98 +398,113 @@ private fun buildChapterText(book: Book, index: Int, chapter: Chapter, marks: Bo
 @Composable
 private fun ReaderMenu(
     app: AppState, book: Book, chapter: Int, page: Int, pageCount: Int, pct: Int,
-    onClose: () -> Unit, onChapters: () -> Unit, onFont: () -> Unit,
+    onParts: () -> Unit, onText: () -> Unit, onClose: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize()) {
-        Column(Modifier.fillMaxWidth().background(Paper)) {
-            TopBar(book.meta.title, onBack = { app.screen = Screen.Library }) {
-                EinkButton("Partes", Modifier.padding(end = 6.dp)) { onChapters() }
-                EinkButton("Aa", Modifier.padding(end = 6.dp)) { onFont() }
-            }
-            Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                EinkButton(if (app.settings.showMarks) "Marcas: ligadas" else "Marcas: desligadas") {
-                    app.updateSettings(app.settings.copy(showMarks = !app.settings.showMarks))
-                }
-                EinkButton("Gramática") { app.screen = Screen.Grammar }
-                EinkButton("Vocabulário") { app.screen = Screen.Vocabulary }
-            }
-            Box(Modifier.fillMaxWidth().height(2.dp).background(Ink))
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(18.dp)) {
+        Text(book.meta.title, fontSize = 22.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
+        Text(
+            "Parte ${chapter + 1} de ${book.chapters.size} · página ${page + 1} de $pageCount · $pct% do livro",
+            fontSize = 15.sp, color = Grey,
+        )
+        Spacer(Modifier.height(14.dp))
+        MenuRow("Partes do livro") { onParts() }
+        MenuRow("Texto: tamanho, espaço e margens") { onText() }
+        MenuRow(if (app.settings.showMarks) "Marcas de expressões e gramática: ligadas" else "Marcas de expressões e gramática: desligadas") {
+            app.updateSettings(app.settings.copy(showMarks = !app.settings.showMarks))
         }
-        Box(Modifier.weight(1f).fillMaxWidth().tapClose(onClose))
-        Column(Modifier.fillMaxWidth().background(Paper)) {
-            Box(Modifier.fillMaxWidth().height(2.dp).background(Ink))
-            Text(
-                "Parte ${chapter + 1} de ${book.chapters.size} · página ${page + 1} de $pageCount · $pct% do livro",
-                Modifier.padding(14.dp), fontSize = 15.sp,
-            )
-            Text(
-                "Toque nas bordas ou use os botões de página para virar. Toque numa palavra para ver a tradução. " +
-                    "Fundo cinza = expressão · sublinhado = ponto de gramática.",
-                Modifier.padding(start = 14.dp, end = 14.dp, bottom = 14.dp), fontSize = 13.sp, color = Grey,
-            )
-        }
+        MenuRow("Gramática") { app.screen = Screen.Grammar }
+        MenuRow("Vocabulário") { app.screen = Screen.Vocabulary }
+        MenuRow("Biblioteca") { app.screen = Screen.Library }
+        Spacer(Modifier.height(10.dp))
+        Text(
+            "Toque numa palavra para ver a tradução. Para virar a página: toque nas bordas da tela, deslize, use as setas ‹ › embaixo ou os botões do aparelho. " +
+                "Fundo cinza = expressão · sublinhado = ponto de gramática.",
+            fontSize = 14.sp, color = Grey,
+        )
+        Spacer(Modifier.height(12.dp))
+        EinkButton("Fechar", Modifier.fillMaxWidth()) { onClose() }
     }
 }
 
 @Composable
-private fun Modifier.tapClose(onClose: () -> Unit): Modifier = this.tap(onClose)
-
-@Composable
-private fun ChaptersDialog(book: Book, current: Int, onClose: () -> Unit, onPick: (Int) -> Unit) {
-    Dialog(onDismissRequest = onClose) {
-        Column(
-            Modifier.fillMaxWidth().heightIn(max = 560.dp).border(2.dp, Ink, RoundedCornerShape(8.dp))
-                .background(Paper, RoundedCornerShape(8.dp)).padding(vertical = 12.dp)
-        ) {
-            Text("Partes do livro", Modifier.padding(horizontal = 16.dp, vertical = 6.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            val state = rememberLazyListState(initialFirstVisibleItemIndex = (current - 2).coerceAtLeast(0))
-            LazyColumn(state = state, modifier = Modifier.weight(1f, fill = false)) {
-                itemsIndexed(book.chapters) { i, c ->
-                    Text(
-                        c.title.ifBlank { "Parte ${i + 1}" },
-                        Modifier.fillMaxWidth().tap { onPick(i) }.padding(horizontal = 16.dp, vertical = 12.dp),
-                        fontSize = 17.sp,
-                        fontWeight = if (i == current) FontWeight.Bold else FontWeight.Normal,
-                    )
-                    Divider()
-                }
-            }
-            Spacer(Modifier.height(8.dp))
-            EinkButton("Fechar", Modifier.padding(horizontal = 16.dp)) { onClose() }
-        }
+private fun MenuRow(label: String, onClick: () -> Unit) {
+    Column(Modifier.fillMaxWidth().tap(onClick)) {
+        Text(label, fontSize = 18.sp, modifier = Modifier.padding(vertical = 14.dp))
+        Divider()
     }
 }
 
 @Composable
-private fun FontDialog(app: AppState, onClose: () -> Unit) {
+private fun PartsList(book: Book, current: Int, onClose: () -> Unit, onPick: (Int) -> Unit) {
+    Column(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
+        Text("Partes do livro", Modifier.padding(horizontal = 16.dp, vertical = 6.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        val state = rememberLazyListState(initialFirstVisibleItemIndex = (current - 2).coerceAtLeast(0))
+        LazyColumn(state = state, modifier = Modifier.weight(1f, fill = false)) {
+            itemsIndexed(book.chapters) { i, c ->
+                Text(
+                    c.title.ifBlank { "Parte ${i + 1}" },
+                    Modifier.fillMaxWidth().tap { onPick(i) }.padding(horizontal = 16.dp, vertical = 14.dp),
+                    fontSize = 18.sp,
+                    fontWeight = if (i == current) FontWeight.Bold else FontWeight.Normal,
+                )
+                Divider()
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        EinkButton("Fechar", Modifier.padding(horizontal = 16.dp).fillMaxWidth()) { onClose() }
+    }
+}
+
+/** Text settings shown inside the book. Changes apply at once, so the reader sees the result behind the panel. */
+@Composable
+fun TextSettings(app: AppState, onClose: () -> Unit) {
     val s = app.settings
-    Dialog(onDismissRequest = onClose) {
-        Column(
-            Modifier.fillMaxWidth().border(2.dp, Ink, RoundedCornerShape(8.dp)).background(Paper, RoundedCornerShape(8.dp)).padding(18.dp)
-        ) {
-            Text("Texto", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(12.dp))
-            StepRow("Tamanho da letra", "${s.fontSize}",
-                onMinus = { app.updateSettings(s.copy(fontSize = (s.fontSize - 1).coerceAtLeast(14))) },
-                onPlus = { app.updateSettings(s.copy(fontSize = (s.fontSize + 1).coerceAtMost(34))) })
-            StepRow("Espaço entre linhas", String.format("%.2f", s.lineSpacing),
-                onMinus = { app.updateSettings(s.copy(lineSpacing = (s.lineSpacing - 0.1f).coerceAtLeast(1.1f))) },
-                onPlus = { app.updateSettings(s.copy(lineSpacing = (s.lineSpacing + 0.1f).coerceAtMost(2.2f))) })
-            StepRow("Margens", "${s.margin}",
-                onMinus = { app.updateSettings(s.copy(margin = (s.margin - 4).coerceAtLeast(8))) },
-                onPlus = { app.updateSettings(s.copy(margin = (s.margin + 4).coerceAtMost(56))) })
-            Spacer(Modifier.height(12.dp))
-            EinkButton("Fechar") { onClose() }
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(18.dp)) {
+        Text("Texto", fontSize = 22.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
+        Spacer(Modifier.height(4.dp))
+        Text("Exemplo de texto: Call me Ishmael.", fontSize = s.fontSize.sp, fontFamily = FontFamily.Serif, lineHeight = (s.fontSize * s.lineSpacing).sp)
+        Spacer(Modifier.height(10.dp))
+        StepRow("Tamanho da letra", "${s.fontSize}",
+            onMinus = { app.updateSettings(s.copy(fontSize = (s.fontSize - 2).coerceAtLeast(14))) },
+            onPlus = { app.updateSettings(s.copy(fontSize = (s.fontSize + 2).coerceAtMost(48))) })
+        StepRow("Espaço entre linhas", String.format("%.1f", s.lineSpacing),
+            onMinus = { app.updateSettings(s.copy(lineSpacing = (s.lineSpacing - 0.1f).coerceAtLeast(1.1f))) },
+            onPlus = { app.updateSettings(s.copy(lineSpacing = (s.lineSpacing + 0.1f).coerceAtMost(2.4f))) })
+        StepRow("Margens", "${s.margin}",
+            onMinus = { app.updateSettings(s.copy(margin = (s.margin - 4).coerceAtLeast(8))) },
+            onPlus = { app.updateSettings(s.copy(margin = (s.margin + 4).coerceAtMost(64))) })
+        Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("Marcas no texto", fontSize = 17.sp, modifier = Modifier.weight(1f))
+            EinkButton(if (s.showMarks) "Ligadas" else "Desligadas", filled = s.showMarks) {
+                app.updateSettings(s.copy(showMarks = !s.showMarks))
+            }
         }
+        Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("Toque no texto", fontSize = 17.sp, modifier = Modifier.weight(1f))
+            EinkButton(if (s.tapTurnsPage) "Vira a página" else "Traduz a palavra", filled = true) {
+                app.updateSettings(s.copy(tapTurnsPage = !s.tapTurnsPage))
+            }
+        }
+        if (s.tapTurnsPage) Text("Com \"Vira a página\", toque e segure numa palavra para traduzi-la.", fontSize = 14.sp, color = Grey)
+        Text("Atualização completa da tela a cada (páginas):", fontSize = 15.sp, modifier = Modifier.padding(top = 8.dp))
+        Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            for (n in listOf(0, 4, 8, 12, 20)) {
+                EinkButton(if (n == 0) "nunca" else "$n", Modifier.weight(1f), filled = s.fullRefreshEvery == n) {
+                    app.updateSettings(s.copy(fullRefreshEvery = n))
+                }
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+        EinkButton("Fechar", Modifier.fillMaxWidth(), filled = true) { onClose() }
     }
 }
 
 @Composable
 fun StepRow(label: String, value: String, onMinus: () -> Unit, onPlus: () -> Unit) {
     Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(label, fontSize = 16.sp, modifier = Modifier.weight(1f))
-        EinkButton("−") { onMinus() }
-        Text(value, fontSize = 16.sp, modifier = Modifier.width(56.dp).padding(horizontal = 8.dp), maxLines = 1)
-        EinkButton("+") { onPlus() }
+        Text(label, fontSize = 17.sp, modifier = Modifier.weight(1f))
+        EinkButton("  −  ") { onMinus() }
+        Text(value, fontSize = 17.sp, modifier = Modifier.width(56.dp).padding(horizontal = 8.dp), maxLines = 1, textAlign = TextAlign.Center)
+        EinkButton("  +  ") { onPlus() }
     }
 }

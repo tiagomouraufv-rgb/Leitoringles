@@ -8,6 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.lightColorScheme
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -197,4 +201,24 @@ fun LevelBadge(level: String, color: Boolean) {
 @Composable
 fun Divider() {
     Box(Modifier.fillMaxWidth().height(1.dp).background(LightGrey))
+}
+
+/**
+ * A panel drawn inside the screen (not a separate window, which some e-ink
+ * devices handle badly). Tapping outside it or pressing Back closes it.
+ */
+@Composable
+fun Overlay(onClose: () -> Unit, content: @Composable () -> Unit) {
+    BackHandler { onClose() }
+    BoxWithConstraints(Modifier.fillMaxSize().tap(onClose)) {
+        val maxH = maxHeight * 0.88f
+        Column(
+            Modifier.align(Alignment.BottomCenter).fillMaxWidth().heightIn(max = maxH)
+                .background(Paper)
+                .border(BorderStroke(2.dp, Ink))
+                .tap { }
+        ) {
+            content()
+        }
+    }
 }
