@@ -2,7 +2,16 @@ package com.tiagomoura.leitoringles.ui
 
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.layout.offset
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.IntOffset
+import kotlin.math.roundToInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -71,10 +80,40 @@ import com.tiagomoura.leitoringles.data.Book
 import com.tiagomoura.leitoringles.data.Chapter
 import kotlinx.coroutines.delay
 
+/**
+ * Everything needed to turn a touch into a position in the text. The coordinates come from Compose
+ * itself (onGloballyPositioned), so the conversion is always the exact inverse of where the text is drawn.
+ */
+internal class PageHolder {
+    var outer: LayoutCoordinates? = null
+    var text: LayoutCoordinates? = null
+    var layout: TextLayoutResult? = null
+    /** Offset of the page's first character inside the whole laid-out chapter text. */
+    var start: Int = 0
+    var base: Int = 0
+    var chapter: Int = 0
+}
+
+/** Lets automated tests look inside the reader. Not used by the app itself. */
+internal object ReaderProbe {
+    var holder: PageHolder? = null
+    var lastTap: TapTarget? = null
+    var selection: IntRange? = null
+    var selectionDone: Boolean = false
+    var page: Int = 0
+    var chapter: Int = 0
+}
+
 /** What the user tapped on a page. Offsets are inside the chapter text. */
 data class TapTarget(val chapter: Int, val start: Int, val end: Int, val offset: Int)
 
-private class Pages(val layout: TextLayoutResult, val firstLines: List<Int>, val base: Int) {
+private class Pages(
+    val layout: TextLayoutResult,
+    val firstLines: List<Int>,
+    val base: Int,
+    val text: AnnotatedString,
+    val style: TextStyle,
+) {
     val count get() = firstLines.size
     fun firstLine(page: Int) = firstLines[page.coerceIn(0, firstLines.size - 1)]
     fun lastLine(page: Int) =
@@ -82,6 +121,7 @@ private class Pages(val layout: TextLayoutResult, val firstLines: List<Int>, val
     fun top(page: Int) = layout.getLineTop(firstLine(page))
     fun bottom(page: Int) = layout.getLineBottom(lastLine(page))
     fun startOffset(page: Int) = layout.getLineStart(firstLine(page))
+    fun endOffset(page: Int) = layout.getLineEnd(lastLine(page))
     fun pageOf(offset: Int): Int {
         var p = 0
         for (i in firstLines.indices) if (layout.getLineStart(firstLines[i]) <= offset) p = i else break
@@ -134,6 +174,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
     var longFired by remember { mutableStateOf(false) }
     var longPos by remember { mutableStateOf(Offset.Zero) }
     var fullImage by remember { mutableStateOf<Pair<Bitmap, String>?>(null) }
+    val holder = remember { PageHolder() }
     var flash by remember { mutableStateOf(false) }
     var turns by remember { mutableIntStateOf(0) }
     val settings = app.settings
@@ -177,7 +218,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                 line = l + 1
             }
             if (first.isEmpty()) first.add(0)
-            Pages(layout, first, text.second)
+            Pages(layout, first, text.second, text.first, style)
         }
 
         // keep the requested position visible after a new layout
@@ -220,16 +261,23 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
 
         val pageNow = page.coerceIn(0, pages.count - 1)
 
+        /** Converts a touch (in the coordinates of the whole reader) into the coordinates of the page text. */
+        fun textLocal(pos: Offset): Offset? {
+            val o = holder.outer ?: return null
+            val t = holder.text ?: return null
+            if (!o.isAttached || !t.isAttached) return null
+            return t.localPositionOf(o, pos)
+        }
+
         /** Finds the word under a point of the screen. */
         fun hitTest(pos: Offset): TapTarget? {
-            val textY = pos.y - topPx
-            if (textY < 0) return null
-            val yIn = textY + pages.top(pageNow)
-            if (yIn > pages.bottom(pageNow)) return null
-            val xIn = pos.x - marginPx
-            if (xIn < -8f || xIn > widthPx + 8f) return null
-            val off = pages.layout.getOffsetForPosition(Offset(xIn.coerceIn(0f, widthPx), yIn))
-            val inChapter = off - pages.base
+            val lay = holder.layout ?: return null
+            val p = textLocal(pos) ?: return null
+            val w = lay.size.width.toFloat()
+            val h = lay.size.height.toFloat()
+            if (p.y < 0f || p.y > h || p.x < -8f || p.x > w + 8f) return null
+            val off = lay.getOffsetForPosition(Offset(p.x.coerceIn(0f, w), p.y))
+            val inChapter = holder.start + off - holder.base
             if (inChapter < 0) return null
             val txt = book.chapters[chapterIndex].text
             val r = TextTools.wordAt(txt, inChapter)
@@ -240,12 +288,12 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
 
         /** Chapter offset under a point, clamped to the text of the current page. */
         fun offsetAt(pos: Offset): Int {
-            val top = pages.top(pageNow)
-            val bottom = pages.bottom(pageNow)
-            val yIn = (pos.y - topPx + top).coerceIn(top + 1f, bottom - 1f)
-            val xIn = (pos.x - marginPx).coerceIn(0f, widthPx)
-            val off = pages.layout.getOffsetForPosition(Offset(xIn, yIn)) - pages.base
-            return off.coerceIn(0, book.chapters[chapterIndex].text.length)
+            val lay = holder.layout ?: return 0
+            val p = textLocal(pos) ?: return 0
+            val w = lay.size.width.toFloat()
+            val h = lay.size.height.toFloat()
+            val off = lay.getOffsetForPosition(Offset(p.x.coerceIn(0f, w), p.y.coerceIn(1f, (h - 1f).coerceAtLeast(1f))))
+            return (holder.start + off - holder.base).coerceIn(0, book.chapters[chapterIndex].text.length)
         }
 
         fun longStart(pos: Offset) {
@@ -272,6 +320,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                 if (settings.tapTurnsPage) {
                     sel = null
                     tap = hitTest(longPos)
+                    ReaderProbe.lastTap = tap
                     return
                 }
                 // no drag: select the whole sentence
@@ -301,7 +350,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             }
             val hit = hitTest(pos)
             when {
-                hit != null -> tap = hit
+                hit != null -> { tap = hit; ReaderProbe.lastTap = hit }
                 long -> {}
                 pos.x < screenW * 0.25f -> prev()
                 pos.x > screenW * 0.75f -> next()
@@ -330,8 +379,25 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
         }
 
         val swipePx = with(density) { 70.dp.toPx() }
-        Canvas(
+        val pageStart = pages.startOffset(pageNow)
+        val pageEnd = pages.endOffset(pageNow).coerceAtLeast(pageStart)
+        val pageText = remember(pages, pageNow) { pages.text.subSequence(pageStart, pageEnd) }
+        holder.start = pageStart
+        holder.base = pages.base
+        holder.chapter = chapterIndex
+        val textW = widthPx.toInt().coerceAtLeast(100)
+        val textH = heightPx.toInt().coerceAtLeast(100)
+        val selColor = if (color) Color(0xFFB8DCFF) else Color(0xFFC8C8C8)
+        SideEffect {
+            ReaderProbe.holder = holder
+            ReaderProbe.selection = sel
+            ReaderProbe.selectionDone = selDone
+            ReaderProbe.page = pageNow
+            ReaderProbe.chapter = chapterIndex
+        }
+        Box(
             Modifier.fillMaxSize()
+                .onGloballyPositioned { holder.outer = it }
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = { longFired = false },
@@ -361,19 +427,29 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                     )
                 }
         ) {
-            val top = pages.top(pageNow)
-            val bottom = pages.bottom(pageNow)
-            clipRect(left = 0f, top = topPx, right = size.width, bottom = topPx + (bottom - top) + 1f) {
-                translate(left = marginPx, top = topPx - top) {
-                    sel?.let { r ->
-                        if (r.last >= r.first) {
-                            val path = pages.layout.getPathForRange(pages.base + r.first, pages.base + r.last + 1)
-                            drawPath(path, if (color) Color(0xFFB8DCFF) else Color(0xFFC8C8C8))
+            BasicText(
+                text = pageText,
+                style = pages.style,
+                onTextLayout = { holder.layout = it },
+                modifier = Modifier
+                    .offset { IntOffset(marginPx.roundToInt(), topPx.roundToInt()) }
+                    .layout { measurable, _ ->
+                        val placeable = measurable.measure(Constraints(minWidth = textW, maxWidth = textW, minHeight = 0, maxHeight = textH))
+                        layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+                    }
+                    .clipToBounds()
+                    .drawBehind {
+                        val r = sel
+                        val lay = holder.layout
+                        if (r != null && lay != null && r.last >= r.first) {
+                            val len = pageText.length
+                            val a = (pages.base + r.first - pageStart).coerceIn(0, len)
+                            val b = (pages.base + r.last + 1 - pageStart).coerceIn(0, len)
+                            if (b > a) drawPath(lay.getPathForRange(a, b), selColor)
                         }
                     }
-                    drawText(pages.layout)
-                }
-            }
+                    .onGloballyPositioned { holder.text = it },
+            )
         }
 
         // fixed top bar: always reachable, even if taps on the text fail

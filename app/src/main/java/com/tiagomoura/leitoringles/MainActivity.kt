@@ -20,7 +20,7 @@ import com.tiagomoura.leitoringles.ui.SettingsScreen
 import com.tiagomoura.leitoringles.ui.VocabularyScreen
 
 class MainActivity : ComponentActivity() {
-    private lateinit var app: AppState
+    lateinit var app: AppState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

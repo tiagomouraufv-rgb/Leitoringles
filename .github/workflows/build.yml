@@ -27,7 +27,7 @@ jobs:
         id: build
         run: |
           set -o pipefail
-          gradle --no-daemon assembleRelease 2>&1 | tee build.log
+          gradle --no-daemon testDebugUnitTest assembleRelease 2>&1 | tee build.log
 
       - name: Rename APK
         if: success()
@@ -58,6 +58,7 @@ jobs:
           git config user.name "build-bot"
           git config user.email "build-bot@users.noreply.github.com"
           cp build.log /tmp/build.log || echo "no log" > /tmp/build.log
+          cat app/build/test-results/testDebugUnitTest/*.xml >> /tmp/build.log 2>/dev/null || true
           git fetch origin build-logs || true
           git checkout -B build-logs
           git rm -rq --cached . || true
