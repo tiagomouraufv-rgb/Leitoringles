@@ -98,6 +98,8 @@ internal class PageHolder {
 internal object ReaderProbe {
     var holder: PageHolder? = null
     var lastTap: TapTarget? = null
+    /** Word found with the previous (manual) coordinate maths, for comparison in tests. */
+    var oldMathWord: String? = null
     var selection: IntRange? = null
     var selectionDone: Boolean = false
     var page: Int = 0
@@ -341,7 +343,19 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             selDone = true
         }
 
+        /** The previous version's hit test (manual maths), kept only to compare in tests. */
+        fun oldMathWord(pos: Offset): String? {
+            val yIn = pos.y - topPx + pages.top(pageNow)
+            val xIn = (pos.x - marginPx).coerceIn(0f, widthPx)
+            val off = pages.layout.getOffsetForPosition(Offset(xIn, yIn)) - pages.base
+            val txt = book.chapters[chapterIndex].text
+            if (off < 0) return null
+            val r = TextTools.wordAt(txt, off) ?: return null
+            return txt.substring(r.first, r.last + 1)
+        }
+
         fun handleTap(pos: Offset, long: Boolean) {
+            ReaderProbe.oldMathWord = oldMathWord(pos)
             if (longFired) { longFired = false; return }
             if (panel.isNotEmpty() || tap != null || selDone) return
             if (settings.tapTurnsPage && !long) {

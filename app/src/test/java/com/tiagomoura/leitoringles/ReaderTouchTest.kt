@@ -25,7 +25,7 @@ import org.robolectric.annotation.GraphicsMode
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34], qualifiers = "w411dp-h891dp-xxhdpi")
+@Config(sdk = [34, 35], qualifiers = "w411dp-h891dp-xxhdpi")
 class ReaderTouchTest {
     @get:Rule
     val rule = createAndroidComposeRule<MainActivity>()
@@ -81,7 +81,7 @@ class ReaderTouchTest {
             rule.onRoot().performTouchInput { click(centreOf(r)) }
             rule.waitForIdle()
             val got = tappedWord()
-            println("$label: touched '$expected' at ${centreOf(r)} -> '$got'")
+            println("$label: touched '$expected' at ${centreOf(r)} -> '$got' (old maths: '${ReaderProbe.oldMathWord}')")
             assertEquals("$label: touched '$expected'", expected, got)
             ok++
             rule.onNodeWithText("Fechar").performClick()

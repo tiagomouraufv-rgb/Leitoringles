@@ -30,19 +30,19 @@ jobs:
           gradle --no-daemon testDebugUnitTest assembleRelease 2>&1 | tee build.log
 
       - name: Rename APK
-        if: success()
+        if: success() && github.ref == 'refs/heads/main'
         run: |
           mkdir -p out
           cp app/build/outputs/apk/release/app-release.apk "out/LeitorIngles-1.0.${{ github.run_number }}.apk"
 
       - uses: actions/upload-artifact@v4
-        if: success()
+        if: success() && github.ref == 'refs/heads/main'
         with:
           name: LeitorIngles-apk
           path: out/*.apk
 
       - name: Publish release
-        if: success()
+        if: success() && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
@@ -51,6 +51,23 @@ jobs:
             APK do Leitor Inglês. No Boox, baixe o arquivo .apk abaixo e toque nele para instalar.
           files: out/*.apk
           make_latest: true
+
+      - name: Save test results
+        if: always()
+        run: |
+          mkdir -p /tmp/tr
+          cp app/build/test-results/testDebugUnitTest/*.xml /tmp/tr/ 2>/dev/null || echo "none" > /tmp/tr/none.txt
+          git config user.name "build-bot"
+          git config user.email "build-bot@users.noreply.github.com"
+          git stash -u -q || true
+          git checkout -q --orphan test-results-tmp
+          git rm -rq --cached . || true
+          rm -rf ./* .github || true
+          cp /tmp/tr/* .
+          git add -A
+          git commit -qm "test results ${{ github.run_number }} ${{ github.ref_name }}" || true
+          git push -qf origin HEAD:test-results-${{ github.ref_name }}
+          git checkout -qf ${{ github.sha }}
 
       - name: Save build log on failure
         if: failure()
