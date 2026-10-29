@@ -1,7 +1,9 @@
 package com.tiagomoura.leitoringles
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -71,7 +73,7 @@ class ReaderTouchTest {
         assertTrue("$label: page has words", words.size > 20)
         // up to 40 words spread over the whole page: first lines, middle and last lines
         val step = (words.size / 40).coerceAtLeast(1)
-        val sample = words.filterIndexed { i, _ -> i % step == 0 } + words.last()
+        val sample = words.filterIndexed { i, _ -> i % step == 0 } + listOf(words.last())
         var ok = 0
         for (r in sample) {
             val expected = pageText().substring(r.first, r.last + 1)
