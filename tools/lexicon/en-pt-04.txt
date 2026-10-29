@@ -1,0 +1,401 @@
+library|biblioteca|
+lick|lamber|
+lid|tampa|
+lie|deitar; mentir; mentira|
+lieutenant|tenente|
+life|vida|
+lifeless|sem vida|
+lift|levantar|
+light|luz; acender; leve|
+lightly|levemente|
+lightness|leveza|
+lightning|relâmpago, raio|
+like|como; gostar|
+likely|provável|
+lily|lírio|
+lime|tília (lime tree)|
+line|linha; corda (de arpão)|
+lion|leão|
+lip|lábio|
+liquid|líquido|
+list|lista|
+listen|escutar|
+little|pequeno; pouco|
+live|viver; morar|
+lively|animado, vivo|
+living|vivo; sustento|
+lizard|lagarto|
+load|carregar; carga|
+loaded|carregado|
+loaf|pão (loaves: pães)|
+local|local|
+lock|trancar; fechadura|
+locked|trancado|
+locksmith|chaveiro|
+lodge|alojar|
+lodging|alojamento|
+log|tora; diário de bordo; barquinha (medidor de velocidade)|
+logbook|diário de bordo|a book where a captain writes what happens each day
+logic|lógica|
+loneliness|solidão|
+lonely|solitário|
+long|longo; desejar|
+longing|anseio, saudade|
+look|olhar; parecer|
+looking|olhando (good-looking: bonito)|
+lookout|vigia|a person who watches for danger or whales
+loom|tear|a machine for weaving cloth
+loose|solto|
+lose|perder|
+loss|perda|
+lost|perdido|
+lot|monte (a lot: muito); sorte|
+loud|alto (som)|
+louder|mais alto|
+loudly|em voz alta|
+louis|luís (moeda de ouro francesa)|
+love|amar; amor|
+lovely|adorável|
+lover|amante|
+loving|amoroso|
+low|baixo|
+lower|baixar|
+loyal|leal|
+luck|sorte|
+luckily|por sorte|
+lucky|sortudo|
+lump|caroço, pedaço|
+lunatic|louco (lunatic asylum: manicômio)|
+lunch|almoço|
+lung|pulmão|
+lure|atrair (com isca)|
+luxury|luxo|
+ma'am|senhora|
+machine|máquina|
+mad|louco|
+madame|madame, senhora|
+madly|loucamente|
+madman|louco|
+madness|loucura|
+magazine|revista|
+magic|magia|
+magician|mágico|
+magnet|ímã|
+magnetic|magnético|
+magnetism|magnetismo|
+magnificent|magnífico|
+maid|criada|a woman servant
+main|principal|
+mainland|continente|
+mainsail|vela grande|
+majestic|majestoso|
+make|fazer|
+malay|malaio|
+male|macho|
+man|homem|
+manage|conseguir; administrar|
+maniac|maníaco|
+manner|maneira (manners: boas maneiras)|
+many|muitos|
+map|mapa|
+marble|mármore|
+march|marcha|
+mark|marca; marcar|
+marked|marcado|
+market|mercado|
+marquis|marquês|a nobleman
+marriage|casamento|
+married|casado|
+marry|casar-se|
+mask|máscara|
+mass|massa; missa|
+mast|mastro|the tall pole that holds the sails
+master|mestre, senhor|
+mastiff|mastim (cão grande)|a very large, strong dog
+mat|tapete pequeno, esteira|
+match|fósforo|
+mate|imediato (oficial de navio); companheiro|an officer on a ship
+material|material|
+matter|importar; assunto (no matter: não importa)|
+mattress|colchão|
+mattresse|colchões|
+may|poder (possibilidade)|
+maybe|talvez|
+mayor|prefeito|
+meadow|prado|
+meal|refeição|
+mean|significar; querer dizer; mesquinho|
+meaning|significado|
+meanwhile|enquanto isso|
+measure|medir; medida|
+measurement|medição, medida|
+meat|carne|
+mechanical|mecânico|
+medal|medalha|
+medicine|remédio|
+medieval|medieval|
+medium|médio|
+meet|encontrar, conhecer|
+meeting|reunião, encontro|
+melancholy|melancolia|
+melt|derreter|
+member|membro|
+memorandum|memorando|
+memory|memória|
+mental|mental|
+mentally|mentalmente|
+merchant|comerciante (merchant ship: navio mercante)|
+mercy|misericórdia|
+message|mensagem|
+metal|metal|
+metallic|metálico|
+method|método|
+midday|meio-dia|
+middle|meio|
+midnight|meia-noite|
+midwife|parteira|
+might|poderia|
+mighty|poderoso|
+mile|milha (1,6 km)|
+milk|leite|
+milky|leitoso|
+million|milhão|
+mind|mente; importar-se|
+minded|de mente (narrow-minded: de mente fechada)|
+mine|meu, minha|
+minister|ministro|
+minute|minuto|
+miracle|milagre|
+mirror|espelho|
+misery|miséria, sofrimento|
+miss|perder, errar; sentir falta; senhorita|
+missing|desaparecido|
+mission|missão|
+missionary|missionário|
+mist|névoa|
+mistake|erro|
+mistaken|enganado|
+mistaking|engano|
+misty|nebuloso|
+mix|misturar|
+moan|gemer|
+moaning|gemido|
+mock|zombar|
+modern|moderno|
+moment|momento|
+money|dinheiro|
+monkey|macaco|
+monster|monstro|
+monstrous|monstruoso|
+month|mês|
+mood|humor|
+moody|mal-humorado|
+moon|lua|
+moonlight|luar|
+moonrise|nascer da lua|
+moonshine|luar|
+more|mais|
+morning|manhã|
+mortal|mortal|
+mortem|(post-mortem: autópsia)|
+most|a maioria; mais|
+mostly|principalmente|
+mother|mãe|
+mouldy|mofado|
+mountain|montanha|
+mourn|lamentar (morte)|
+mourner|enlutado|a person at a funeral
+mouse|rato|
+moustache|bigode|
+mouth|boca|
+move|mover|
+movement|movimento|
+moving|comovente|
+mower|ceifador|
+much|muito|
+murder|assassinato; assassinar|
+murderous|assassino|
+murmur|murmurar|
+mushroom|cogumelo|
+music|música|
+musical|musical|
+musket|mosquete (espingarda antiga)|an old kind of long gun
+must|dever, ter que|
+mutiny|motim|when sailors refuse to obey their officers
+mutual|mútuo|
+my|meu|
+myself|eu mesmo|
+mysterious|misterioso|
+mystery|mistério|
+nail|prego; pregar|
+naked|nu|
+name|nome; nomear|
+nantucket|Nantucket (ilha)|
+narrow|estreito|
+nation|nação|
+native|nativo|
+natural|natural|
+naturally|naturalmente|
+nature|natureza|
+navel|umbigo|
+navigation|navegação|
+navy|marinha|
+near|perto|
+nearby|perto|
+nearly|quase|
+neat|arrumado|
+necessary|necessário|
+necessity|necessidade|
+neck|pescoço|
+need|precisar; necessidade|
+needle|agulha|
+neighbour|vizinho|
+neighbourhood|vizinhança|
+neither|nenhum; nem|
+nerve|nervo; coragem|
+nervous|nervoso|
+nervously|nervosamente|
+net|rede|
+never|nunca|
+new|novo|
+newly|recentemente|
+news|notícias|
+newspaper|jornal|
+next|próximo; ao lado|
+nice|agradável|
+night|noite|
+nightcap|touca de dormir|
+nightdress|camisola|
+nightingale|rouxinol|
+nightly|noturno|
+nineteenth|décimo nono|
+ninetieth|nonagésimo|
+no|não; nenhum|
+nobility|nobreza|
+noble|nobre|
+nobleman|nobre|
+nobody|ninguém|
+nod|acenar com a cabeça|
+noise|barulho|
+none|nenhum|
+nonsense|bobagem|
+noon|meio-dia|
+nor|nem|
+normal|normal|
+normally|normalmente|
+north|norte|
+nose|nariz|
+nostril|narina|
+not|não|
+note|nota, bilhete; notar|
+notebook|caderno|
+nothing|nada|
+notice|notar|
+novel|romance (livro)|
+now|agora|
+nowhere|lugar nenhum|
+nuisance|incômodo|
+numb|dormente|
+number|número|
+nurse|enfermeira|
+nut|noz|
+o'clock|horas (ten o'clock: dez horas)|
+oak|carvalho|
+oar|remo|
+oath|juramento|a serious promise
+obey|obedecer|
+object|objeto; objetar|
+obscure|obscuro|
+obviously|obviamente|
+occasion|ocasião|
+ocean|oceano|
+odd|estranho|
+of|de|
+off|fora; desligado|
+offer|oferecer; oferta|
+office|escritório|
+officer|oficial|
+often|frequentemente|
+oh|oh|
+oil|óleo; azeite (de baleia)|
+oily|oleoso|
+old|velho|
+ominous|ameaçador, de mau agouro|
+on|em, sobre|
+once|uma vez|
+one|um|
+only|só, apenas; único|
+onto|para cima de|
+open|abrir; aberto|
+opening|abertura|
+opera|ópera|
+operate|operar|
+operation|operação|
+opinion|opinião|
+oppose|opor-se|
+opposite|oposto|
+or|ou|
+oral|oral|
+orange|laranja|
+orchard|pomar|
+orchestra|orquestra|
+ordeal|provação|
+order|ordem; ordenar|
+ordinary|comum|
+organise|organizar|
+original|original|
+originality|originalidade|
+orphan|órfão|
+other|outro|
+otherwise|senão; de outra forma|
+our|nosso|
+ours|nosso|
+ourselves|nós mesmos|
+out|fora|
+outburst|explosão (de raiva)|
+outer|externo|
+outside|fora|
+outward|para fora|
+outwardly|por fora|
+oven|forno|
+over|sobre; acabado|
+overboard|ao mar (cair do navio)|
+overcome|superar, dominar|
+overpower|dominar|
+owe|dever (ter dívida)|
+owl|coruja|
+own|próprio|
+owner|dono|
+p.m.|da tarde/noite|
+pack|bando, matilha|
+padded|acolchoado|
+paddle|remar|
+pagan|pagão|a person who does not believe in the Christian God
+page|página|
+pain|dor|
+painful|doloroso|
+paint|tinta|
+painter|pintor|
+painting|pintura|
+pair|par|
+pale|pálido|
+paleness|palidez|
+paler|mais pálido|
+pallbearer|carregador de caixão|
+palm|palma (da mão)|
+pang|pontada (de dor)|
+panic|pânico|
+panther|pantera|
+paper|papel|
+paradise|paraíso|
+paragraph|parágrafo|
+parcel|pacote|
+paregoric|elixir paregórico (remédio)|
+parish|paróquia|
+park|parque|
+part|parte|
+particular|específico (in particular: em especial)|
+partly|em parte|
+partner|sócio|
+party|festa|
+lord|senhor; lorde (título de nobreza)|

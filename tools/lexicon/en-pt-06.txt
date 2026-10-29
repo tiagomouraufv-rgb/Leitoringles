@@ -1,0 +1,399 @@
+scale|escala; balança|
+scandal|escândalo|
+scar|cicatriz|a mark left on the skin after a wound
+scare|assustar|
+scene|cena|
+sceptic|cético|
+sceptical|cético|not ready to believe things
+scholar|estudioso|
+scholarship|bolsa de estudos|
+school|escola; cardume|
+schooner|escuna (tipo de navio)|
+science|ciência|
+scientific|científico|
+scientist|cientista|
+scornful|desdenhoso|
+scornfully|com desdém|
+scratch|coçar, arranhar|
+scream|gritar; grito|
+screw|parafuso; aparafusar|
+screwdriver|chave de fenda|
+scrimshaw|scrimshaw (entalhe em osso de baleia)|carvings made by sailors on whale teeth and bones
+scrub|esfregar|
+sea|mar|
+seabird|ave marinha|
+seal|selar|
+search|procurar; busca|
+searchlight|holofote|
+seasick|enjoado (no mar)|
+season|estação; temporada|
+seat|assento|
+seaweed|alga|
+second|segundo|
+secrecy|sigilo|
+secret|segredo; secreto|
+secretary|secretário|
+secretly|secretamente|
+see|ver|
+seem|parecer|
+seize|agarrar|
+self|si mesmo|
+selfish|egoísta|
+selfishness|egoísmo|
+sell|vender|
+seminary|seminário|a school where men study to become priests
+send|enviar|
+sense|sentido; senso|
+sensible|sensato|
+sensibly|sensatamente|
+sensitive|sensível|
+sentence|sentença; frase|
+separate|separar|
+series|série|
+serious|sério|
+seriously|seriamente|
+seriousness|seriedade|
+sermon|sermão|a talk given by a priest in church
+servant|criado, empregado|
+serve|servir|
+service|serviço; culto|
+set|pôr; ajustar; conjunto|
+settle|resolver; estabelecer-se|
+seventh|sétimo|
+several|vários|
+severely|severamente|
+sewing|costura|
+shadow|sombra|
+shadowy|sombrio|
+shake|sacudir, tremer|
+shaking|tremendo|
+shall|(futuro / sugestão: shall we...? vamos...?)|
+shame|vergonha|
+shape|forma|
+share|compartilhar; parte|
+shark|tubarão|
+sharp|afiado|
+sharpen|afiar|
+shave|barbear|
+shaven|barbeado|
+shawl|xale|
+she|ela|
+sheep|ovelha|
+sheet|lençol; folha|
+shell|concha; casca|
+sherry|xerez (vinho)|
+shield|proteger|
+shin|canela (perna)|
+shine|brilhar|
+ship|navio|
+shipmate|companheiro de bordo|
+shipping|transporte marítimo|
+shirt|camisa|
+shiver|tremer; calafrio|
+shock|choque; chocar|
+shocked|chocado|
+shoe|sapato; ferradura|
+shoot|atirar|
+shop|loja|
+shore|costa, margem|
+short|curto; baixo|
+shorten|encurtar|
+shorthand|taquigrafia|a fast way of writing with symbols
+shortly|em breve|
+shot|tiro|
+should|deveria|
+shoulder|ombro|
+shout|gritar|
+shouting|gritaria|
+shovel|pá|
+show|mostrar|
+shrink|encolher; recuar|
+shroud|mortalha|a cloth used to cover a dead body
+shrubbery|arbustos|
+shudder|estremecer|
+shut|fechar|
+shy|tímido|
+shyly|timidamente|
+shyness|timidez|
+siamese|siamês|
+sick|doente; enjoado|
+sickle|foice|
+sickness|doença|
+side|lado|
+sideboard|aparador|
+sieve|peneira|
+sigh|suspirar|
+sight|visão, vista|
+sign|sinal; assinar|
+signal|sinalizar|
+silence|silêncio|
+silent|silencioso|
+silently|silenciosamente|
+silk|seda|
+sill|peitoril|
+silly|bobo|
+silver|prata; prateado|
+silvery|prateado|
+similarity|semelhança|
+simple|simples|
+simply|simplesmente|
+sin|pecado; pecar|
+since|desde; já que|
+sing|cantar|
+singing|canto|
+single|único; solteiro|
+sink|afundar|
+sinking|afundando|
+sir|senhor|
+sister|irmã; freira|
+sit|sentar|
+situation|situação|
+sixteenth|décimo sexto|
+size|tamanho|
+sized|de tamanho|
+skeleton|esqueleto|
+skilful|hábil|
+skin|pele|
+skull|crânio|
+sky|céu|
+skylight|claraboia|
+slack|frouxo (slack tide: estofo da maré)|
+slam|bater (porta)|
+slang|gíria|
+slap|bater (com a mão aberta)|
+slave|escravo|
+sleek|liso, lustroso|
+sleep|dormir; sono|
+sleeping|dormindo|
+sleepwalk|andar dormindo|
+sleepwalker|sonâmbulo|
+sleepwalking|sonambulismo|walking while asleep
+sleepy|sonolento|
+sleet|granizo fino, chuva gelada|
+sleeve|manga|
+slide|escorregar|
+slight|leve|
+slightly|ligeiramente|
+slim|magro, esbelto|
+sling|tipoia|
+slip|escorregar|
+slippery|escorregadio|
+slovak|eslovaco|
+slow|lento|
+slowly|lentamente|
+sly|astuto|
+smacking|estalar (dos lábios)|
+small|pequeno|
+smallpox|varíola|
+smash|despedaçar|
+smashed|despedaçado|
+smell|cheiro; cheirar|
+smile|sorrir; sorriso|
+smoke|fumar; fumaça|
+smoky|esfumaçado|
+smooth|liso|
+smother|sufocar|
+snake|cobra|
+snap|estalo|
+snatcher|ladrão (body-snatcher: ladrão de cadáveres)|
+sniff|farejar|
+snore|roncar|
+snow|neve|
+so|então; tão; assim|
+soap|sabão|
+sob|soluçar|
+sober|sóbrio|
+society|sociedade|
+socket|encaixe, soquete|
+sofa|sofá|
+soft|macio, suave|
+soften|amolecer|
+softly|suavemente|
+softness|suavidade|
+soldier|soldado|
+solemn|solene|
+solid|sólido|
+some|algum; um pouco|
+somebody|alguém|
+somehow|de algum modo|
+someone|alguém|
+something|algo|
+sometimes|às vezes|
+somewhere|em algum lugar|
+son|filho|
+song|canção|
+soon|logo|
+sorrow|tristeza|
+sorry|desculpe; com pena|
+sort|tipo|
+soul|alma|
+sound|som; soar; profundo (sono)|
+soundly|profundamente|
+source|fonte, origem|
+south|sul|
+sovereign|soberano (moeda de ouro inglesa)|
+space|espaço|
+spade|pá; pá de cortar baleia|
+spanish|espanhol|
+spare|de reserva|
+spark|faísca|
+sparrow|pardal|
+spat|cuspiu|
+speak|falar|
+spear|lança|
+special|especial|
+speck|partícula, ponto|
+speech|discurso|
+speed|velocidade|
+spell|feitiço|
+spelling|ortografia|
+spend|gastar; passar (tempo)|
+sperm|esperma (sperm whale: cachalote)|
+spermaceti|espermacete|the white oil in the head of a sperm whale
+spider|aranha|
+spin|girar|
+spine|coluna vertebral|
+spiral|espiral|
+spirit|espírito|
+spiritual|espiritual|
+spit|cuspir|
+spite|despeito (in spite of: apesar de)|
+splash|espirrar (água)|
+splendid|esplêndido|
+split|dividir, rachar|
+spose|(suppose — fala de Queequeg)|
+spot|ponto, mancha; avistar|
+spout|esguicho (de baleia); esguichar|the jet of air and water that a whale blows
+spouter|baleia que esguicha|
+spray|borrifo|
+spread|espalhar|
+spring|primavera; saltar|
+spy|espião|
+squad|pelotão|
+squall|rajada, tempestade súbita|
+square|quadrado; praça|
+squat|agachar|
+squeeze|apertar, espremer|
+squid|lula|
+squire|escudeiro|
+stab|esfaquear|
+stain|manchar|
+stair|degrau (stairs: escada)|
+staircase|escadaria|
+stairway|escadaria|
+stake|estaca|a pointed piece of wood
+stand|ficar de pé; suportar|
+star|estrela|
+starbuck|Starbuck (personagem)|
+start|começar; sobressaltar-se|
+startle|assustar|
+startled|assustado|
+state|estado|
+station|estação|
+statue|estátua|
+stay|ficar|
+steadily|firmemente|
+steady|firme, estável|
+steak|bife|
+steal|roubar|
+steam|vapor|
+steaming|fumegante|
+steel|aço|
+steelkilt|Steelkilt (personagem)|
+steep|íngreme|
+steeply|abruptamente|
+steer|conduzir, dirigir (navio)|
+steersman|timoneiro|
+step|passo; pisar|
+stern|severo; popa (Stern all!: Todos para trás!)|
+steward|comissário de bordo, criado|
+stick|vara; grudar; enfiar|
+sticky|pegajoso|
+stiff|rígido|
+still|ainda; parado|
+stink|feder|
+stir|mexer|
+stomach|estômago|
+stone|pedra|
+stony|de pedra|
+stool|banquinho|
+stop|parar|
+store|guardar, armazenar|
+storm|tempestade|
+stormy|tempestuoso|
+story|história|
+straight|reto; direto|
+straightforwardly|francamente|
+strain|tensão|
+straitjacket|camisa de força|
+strange|estranho|
+strangely|estranhamente|
+stranger|estranho, desconhecido|
+straw|palha|
+stray|perdido, vadio|
+streak|riscar; risco|
+stream|riacho|
+street|rua|
+strength|força|
+strict|rigoroso|
+strike|bater; golpear; soar (horas)|
+string|cordão|
+strip|tira|
+stroke|batida (de relógio)|
+strong|forte|
+strongly|fortemente|
+structure|estrutura|
+struggle|lutar; luta|
+stub|toco|
+stubbornness|teimosia|
+student|estudante|
+study|estudar; escritório|
+stuff|coisa; encher|
+stuffy|abafado|
+stumble|tropeçar|
+stump|toco|
+stupid|burro, estúpido|
+stupidly|estupidamente|
+stupor|estupor, torpor|
+style|estilo|
+subject|assunto|
+substance|substância|
+succeed|ter sucesso|
+success|sucesso|
+successful|bem-sucedido|
+such|tal, tão|
+suck|chupar, sugar|
+sudden|repentino|
+suddenly|de repente|
+suffer|sofrer|
+suffering|sofrimento|
+sugar|açúcar|
+suggest|sugerir|
+suit|terno|
+suitable|adequado|
+sultan|sultão|
+sum|somar|
+summer|verão|
+sun|sol|
+sunk|afundado|
+sunken|afundado|
+sunlight|luz do sol|
+sunny|ensolarado|
+sunrise|nascer do sol|
+sunset|pôr do sol|
+sunshine|sol, luz do sol|
+superstition|superstição|
+supper|ceia, jantar|
+support|apoiar|
+suppose|supor|
+sure|certo, seguro|
+surely|certamente|
+surface|superfície|
+surgeon|cirurgião|
+surgical|cirúrgico|
+surprise|surpresa; surpreender|
+surprised|surpreso|
+surprising|surpreendente|
+surround|cercar|
+survive|sobreviver|
+suspect|suspeitar|

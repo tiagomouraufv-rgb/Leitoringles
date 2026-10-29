@@ -1,0 +1,400 @@
+pass|passar|
+passage|passagem; corredor; trecho|
+passenger|passageiro|
+passion|paixão|
+passionate|apaixonado|
+passionately|apaixonadamente|
+past|passado; depois de|
+paste|colar|
+path|caminho|
+patience|paciência|
+patient|paciente|
+patiently|pacientemente|
+pattern|padrão, desenho|
+pause|pausa|
+pay|pagar|
+peace|paz|
+peaceful|pacífico, tranquilo|
+peacefully|tranquilamente|
+peak|pico|
+pearl|pérola|
+peasant|camponês|a poor person who works on the land
+peck|bicar|
+peculiar|peculiar|
+peel|casca|
+peg|pino, cavilha|
+pen|caneta, pena|
+pencil|lápis|
+people|pessoas; povo|
+pepper|pimenta|
+perfect|perfeito|
+perfectly|perfeitamente|
+performance|apresentação, espetáculo|
+perfume|perfume|
+perhaps|talvez|
+period|período|
+permanence|permanência|
+permission|permissão|
+persian|persa|
+person|pessoa|
+personal|pessoal|
+personality|personalidade|
+personally|pessoalmente|
+pet|animal de estimação|
+phantom|fantasma|
+philosopher|filósofo|
+phonograph|fonógrafo|an early machine that records and plays sound
+photograph|fotografia|
+phrase|frase, expressão|
+physical|físico|
+physically|fisicamente|
+pick|pegar, escolher (pick up: recolher)|
+pickle|picles|
+picture|quadro, imagem|
+piece|pedaço|
+pier|píer, cais|
+pierce|perfurar|
+pig|porco|
+pile|pilha|
+pilgrim|peregrino|
+pillow|travesseiro|
+pilot|piloto, guia|
+pin|alfinete|
+pinch|beliscar|
+pink|rosa (cor)|
+pinprick|picada de alfinete|
+pious|devoto, piedoso|very religious
+pipe|cachimbo; cano|
+pirate|pirata|
+pistol|pistola|
+pitch|arremessar; balançar (navio)|
+pitchpole|arremessar a lança (técnica baleeira)|
+pity|pena, compaixão|
+place|lugar; colocar|
+plan|plano; planejar|
+plane|plátano (árvore)|
+planet|planeta|
+plank|tábua|
+planning|planejamento|
+plant|plantar; planta|
+platform|plataforma|
+play|brincar; tocar; peça|
+playful|brincalhão|
+plaything|brinquedo|
+pleading|súplica|
+pleasant|agradável|
+please|por favor; agradar|
+pleased|satisfeito|
+pleasure|prazer|
+pledge|prometer, empenhar|
+plenty|muito, bastante|
+plot|conspiração; enredo|
+plume|pluma|
+pocket|bolso|
+poem|poema|
+point|ponto; apontar|
+pointed|pontudo|
+poison|veneno; envenenar|
+pole|vara; polo|
+police|polícia|
+policeman|policial|
+polished|polido|
+polite|educado|
+politely|educadamente|
+politic|política (politics)|
+political|político|
+politician|político|
+polynesian|polinésio|
+pool|poça; piscina|
+poor|pobre|
+popular|popular|
+pork|carne de porco|
+porpoise|boto, toninha|
+port|porto|
+portrait|retrato|
+position|posição|
+possession|posse|
+possible|possível|
+post|correio; enviar pelo correio; posto|
+pot|panela, caldeirão|
+pound|libra|
+pour|despejar; chover forte|
+poverty|pobreza|
+power|poder|
+powerful|poderoso|
+powerfully|poderosamente|
+practise|praticar|
+prairie|pradaria|
+praise|elogiar|
+pray|rezar|
+prayer|oração|
+preach|pregar (sermão)|
+preacher|pregador|
+precious|precioso|
+prefer|preferir|
+prepare|preparar|
+presence|presença|
+present|presente|
+preserve|preservar; conservar|
+preserver|salva-vidas|
+press|apertar, pressionar|
+pretend|fingir|
+prettiest|a mais bonita|
+pretty|bonito; bastante|
+preying|(preying on: atormentando)|
+price|preço|
+prick|picar|
+pride|orgulho|
+priest|padre|
+priesthood|sacerdócio|
+prince|príncipe|
+principle|princípio|
+prison|prisão|
+prisoner|prisioneiro|
+private|particular, privado|
+privilege|privilégio|
+probably|provavelmente|
+problem|problema|
+procession|procissão, desfile|
+produce|produzir|
+profession|profissão|
+profit|lucro|
+progress|progresso|
+promise|prometer; promessa|
+proof|prova|
+proper|adequado|
+properly|adequadamente|
+property|propriedade|
+prophecy|profecia|
+prophet|profeta|
+proposal|pedido de casamento; proposta|
+propose|propor; pedir em casamento|
+prosecution|acusação (no tribunal)|
+protect|proteger|
+protection|proteção|
+protest|protesto|
+protestant|protestante|
+proud|orgulhoso|
+proudly|orgulhosamente|
+prove|provar|
+proverb|provérbio|
+provide|fornecer|
+provoke|provocar|
+prude|puritana|
+public|público|
+publish|publicar|
+pull|puxar|
+pulpit|púlpito|the high place in a church where the priest speaks
+pulse|pulso|
+pump|bomba (de água)|
+punch|soco|
+punctual|pontual|
+puncture|furo|
+punctured|furado|
+punish|punir|
+punishment|punição|
+pupil|aluno|
+puppy|filhote de cachorro|
+pure|puro|
+purest|o mais puro|
+purity|pureza|
+purple|roxo|
+purpose|propósito|
+push|empurrar|
+put|colocar|
+puzzle|intrigar; quebra-cabeça|
+pyre|pira (fogueira funerária)|
+quadrant|quadrante (instrumento de navegação)|an instrument used to measure the height of the sun
+quality|qualidade|
+quarrelsome|briguento|
+quarter|quarto (1/4); quarter-deck: tombadilho|
+queen|rainha|
+queequeg|Queequeg (personagem)|
+queer|estranho|
+question|pergunta; questão|
+quick|rápido|
+quickly|rapidamente|
+quiet|quieto|
+quieter|mais quieto|
+quietly|em silêncio|
+quill|pena de escrever|
+quite|bastante; completamente|
+quote|citar|
+race|corrida; raça; correr|
+racehorse|cavalo de corrida|
+rag|trapo|
+rage|fúria|
+rail|trilho; parapeito|
+railway|ferrovia|
+rain|chuva; chover|
+rainbow|arco-íris|
+raise|levantar; criar|
+ram|aríete|
+rank|posto, patente|
+rare|raro|
+rarely|raramente|
+rat|rato|
+rather|bastante; preferivelmente (would rather: preferiria)|
+rattle|chacoalhar|
+rave|delirar|
+raving|delírio|
+raw|cru|
+razor|navalha|
+reach|alcançar|
+read|ler|
+reader|leitor|
+reading|leitura|
+ready|pronto|
+real|real, verdadeiro|
+realise|perceber|
+reality|realidade|
+really|realmente|
+reason|razão|
+reasonable|razoável|
+receive|receber|
+recently|recentemente|
+recipe|receita|
+recite|recitar|
+recline|reclinar|
+recognise|reconhecer|
+recommend|recomendar|
+recommendation|recomendação|
+record|registrar; registro|
+recover|recuperar-se|
+red|vermelho|
+reduce|reduzir|
+reef|recife|
+reflect|refletir|
+reflection|reflexo; reflexão|
+refusal|recusa|
+refuse|recusar|
+regard|considerar|
+regiment|regimento|
+region|região|
+regret|arrepender-se|
+regular|regular|
+reject|rejeitar|
+rejection|rejeição|
+relative|parente|
+relax|relaxar|
+relaxed|relaxado|
+relief|alívio|
+relieve|aliviar|
+religion|religião|
+religious|religioso|
+remain|permanecer|
+remember|lembrar|
+remind|lembrar (alguém de algo)|
+remove|remover|
+renfield|Renfield (personagem)|
+repair|consertar|
+repeat|repetir|
+repent|arrepender-se|
+reply|responder|
+report|relatar; relatório|
+reporter|repórter|
+reputation|reputação|
+request|pedido|
+require|exigir|
+rescue|resgatar|
+resign|demitir-se, renunciar|
+resist|resistir|
+respect|respeito; respeitar|
+respected|respeitado|
+respectful|respeitoso|
+response|resposta|
+responsible|responsável|
+rest|descansar; resto|
+restless|inquieto|
+restore|restaurar|
+result|resultado|
+retell|recontar|
+return|voltar|
+revenge|vingança|
+reverse|inverter|
+revolution|revolução|
+revolver|revólver|
+reward|recompensa|
+rib|costela|
+ribbon|fita|
+rich|rico|
+rid|livrar (get rid of: livrar-se de)|
+ride|cavalgar; andar de|
+ridiculous|ridículo|
+rifle|rifle, espingarda|
+rig|montar|
+right|certo; direito; direita|
+righteousness|justiça (divina)|
+ring|tocar (sino); anel|
+ripple|ondulação|
+rise|subir, levantar-se|
+risk|arriscar; risco|
+rival|rival|
+river|rio|
+road|estrada|
+roar|rugir|
+roast|assado|
+robber|ladrão|
+robe|túnica, batina|
+rock|rocha|
+rocky|rochoso|
+rod|vara (lightning rod: para-raios)|
+role|papel|
+roll|rolar|
+roman|romano|
+romantic|romântico|
+roof|telhado|
+room|quarto, sala|
+rooster|galo|
+rope|corda|
+rose|rosa (flor)|
+rotten|podre|
+rough|áspero; rude|
+round|redondo; ao redor|
+rounder|mais redondo|
+route|rota|
+rover|andarilho|
+roving|vagar|
+row|remar; fileira|
+rub|esfregar|
+rude|rude, mal-educado|
+ruin|ruína; arruinar|
+rule|regra; governar|
+rum|rum|
+rumour|boato|
+run|correr|
+rush|apressar-se, correr|
+russian|russo|
+rusty|enferrujado|
+sacred|sagrado|
+sad|triste|
+saddle|sela|
+sadly|tristemente|
+sadness|tristeza|
+safe|seguro|
+safely|em segurança|
+safety|segurança|
+sail|vela; navegar|
+sailing|navegação|
+sailor|marinheiro|
+saint|santo|
+sake|(for ... sake: pelo bem de)|
+salad|salada|
+salary|salário|
+sale|venda|
+salmon|salmão|
+salt|sal|
+same|mesmo|
+sand|areia|
+sane|são (mentalmente)|
+sapphire|safira|
+sat|sentou|
+satisfaction|satisfação|
+satisfied|satisfeito|
+savage|selvagem|
+save|salvar|
+saving|economia|
+saw|serra|
+sawed|serrou|
+sawmill|serraria|a place where trees are cut into planks
+say|dizer|

@@ -1,0 +1,400 @@
+gloomy|sombrio, triste|
+glory|glória|
+glue|cola|
+go|ir|
+god|Deus; deus|
+gold|ouro; dourado|
+golden|dourado|
+gone|ido, foi embora|
+good|bom|
+goodbye|adeus, tchau|
+goodness|bondade (for goodness' sake: pelo amor de Deus)|
+gor|(by gor: por Deus — fala popular)|
+gossip|fofoca|
+got|conseguiu; ficou|
+gout|gota (doença das articulações)|
+gown|roupão; vestido|
+grab|agarrar|
+grace|graça, elegância|
+graceful|gracioso|
+graf|graf|
+grain|grão|
+grammar|gramática|
+grampus|golfinho-de-risso (tipo de cetáceo)|
+grand|grandioso|
+grander|mais grandioso|
+grandfather|avô|
+grass|grama|
+grassy|gramado|
+grateful|grato|
+grave|túmulo; sério|
+gravestone|lápide|
+graveyard|cemitério|
+great|grande; ótimo|
+greatly|muito|
+greatness|grandeza|
+greek|grego|
+green|verde|
+grey|cinza|
+grieve|sofrer, lamentar|
+grim|sombrio, severo|
+grimly|severamente|
+grog|grogue (rum com água)|a drink of rum and water
+groin|virilha|
+ground|chão|
+group|grupo|
+grow|crescer|
+growl|rosnar|
+grumble|resmungar|
+grumpy|rabugento|
+guard|guarda|
+guess|adivinhar; achar|
+guest|hóspede, convidado|
+guide|guiar|
+guillotine|guilhotina|a machine for cutting off heads
+guilt|culpa|
+guilty|culpado|
+gum|gengiva|
+gun|arma de fogo|
+gunpowder|pólvora|
+gunshot|tiro|
+gunsmith|armeiro|a person who makes or sells guns
+gurgle|gorgolejar|
+gurgling|gorgolejo|
+gypsy|cigano|
+ha|há!|
+habit|hábito|
+hair|cabelo|
+haired|de cabelo (curly-haired: de cabelo cacheado)|
+half|metade; meio|
+hall|salão; corredor|
+halt|parem!; parada|
+halyard|adriça (corda para içar velas)|
+hammer|martelo; martelar|
+hammock|rede (de dormir)|
+hampstead|Hampstead (bairro de Londres)|
+hand|mão|
+handful|punhado|
+handfuls|punhados|
+handle|alça, maçaneta|
+handsome|bonito (homem)|
+hang|pendurar; enforcar|
+happen|acontecer|
+happily|felizmente; alegremente|
+happiness|felicidade|
+happy|feliz|
+harbour|porto|
+hard|duro; difícil; com força|
+harden|endurecer|
+hardly|mal, quase não|
+harm|dano; prejudicar|
+harpoon|arpão|a long spear used to catch whales
+harpooner|arpoador|the man who throws the harpoon
+harsh|áspero, duro|
+hat|chapéu|
+hate|odiar; ódio|
+hateful|odioso|
+hatred|ódio|
+have|ter|
+having|tendo|
+hawk|falcão, gavião|
+he|ele|
+head|cabeça|
+heal|curar, cicatrizar|
+health|saúde|
+healthy|saudável|
+heap|pilha, monte|
+hear|ouvir|
+hearse|carro fúnebre|a vehicle that carries a coffin
+heart|coração|
+heartbreaking|de partir o coração|
+hearted|de coração (broken-hearted: de coração partido)|
+heat|aquecer|
+heath|charneca|open land with wild plants
+heaven|céu (paraíso)|
+heavily|pesadamente|
+heavy|pesado|
+height|altura|
+hell|inferno|
+helm|leme, timão|the wheel or handle that steers a ship
+help|ajudar; ajuda|
+helper|ajudante|
+helpless|indefeso|
+hemp|cânhamo (corda)|a plant used to make rope; rope
+her|ela; dela|
+herd|manada|
+here|aqui|
+heretic|herege|
+hero|herói|
+heroism|heroísmo|
+hers|dela|
+herself|ela mesma|
+hesitation|hesitação|
+hidden|escondido|
+hide|esconder|
+hiding|esconderijo|
+high|alto|
+higher|mais alto|
+highly|altamente|
+hill|colina|
+himself|ele mesmo|
+hint|dica, sugestão|
+his|dele, seu|
+hiss|sibilar, chiar|
+history|história|
+hit|bater; golpe|
+hobby|passatempo|
+hold|segurar; porão (do navio)|
+hole|buraco|
+holiday|férias, feriado|
+hollow|oco|
+holy|sagrado|
+home|casa, lar|
+homecoming|volta para casa|
+homicidal|homicida|
+honest|honesto|
+honestly|honestamente|
+honesty|honestidade|
+honey|mel|
+honour|honra; honrar|
+hooded|encapuzado|
+hook|gancho|
+hooked|em forma de gancho|
+hop|pular|
+hope|esperar; esperança|
+hopeless|sem esperança|
+horizon|horizonte|
+horizontal|horizontal|
+horrible|horrível|
+horribly|horrivelmente|
+horrify|horrorizar|
+horror|horror|
+horse|cavalo|
+horseback|a cavalo|
+hospital|hospital|
+hospitality|hospitalidade|
+hot|quente|
+hotel|hotel|
+hour|hora|
+house|casa|
+household|casa, família (moradores)|
+how|como|
+however|porém|
+howl|uivar; uivo|
+howling|uivo|
+huge|enorme|
+hum|cantarolar|
+human|humano|
+humble|humilde|
+humiliate|humilhar|
+humility|humildade|
+humour|humor; fazer a vontade|
+hump|corcova|
+humpback|baleia-jubarte|
+hundred|cem|
+hundredth|centésimo|
+hunger|fome|
+hungry|com fome|
+hunt|caçar; caça|
+hunter|caçador|
+hurried|apressado|
+hurriedly|apressadamente|
+hurry|pressa; apressar-se|
+hurt|machucar; doer|
+husband|marido|
+hussar|hussardo (soldado da cavalaria)|a soldier of an elegant cavalry regiment
+hymn|hino religioso|
+hypnotise|hipnotizar|
+hypnotism|hipnotismo|
+hypocrisy|hipocrisia|pretending to be good or to believe something
+hypocrite|hipócrita|
+i|eu|
+ice|gelo|
+idea|ideia|
+ideal|ideal|
+idiot|idiota|
+idol|ídolo|
+if|se|
+ignorance|ignorância|
+ignorant|ignorante|
+ignore|ignorar|
+ill|doente|
+illness|doença|
+illusion|ilusão|
+imaginary|imaginário|
+imagination|imaginação|
+imagine|imaginar|
+imitate|imitar|
+imitation|imitação|
+immediately|imediatamente|
+immensely|imensamente|
+immoral|imoral|
+immortal|imortal|
+impatient|impaciente|
+importance|importância|
+important|importante|
+impossible|impossível|
+impress|impressionar|
+in|em|
+inch|polegada (2,5 cm)|
+include|incluir|
+income|renda|
+incredible|incrível|
+indeed|de fato|
+indian|indiano; indígena|
+indirectly|indiretamente|
+infected|infectado|
+infinite|infinito|
+information|informação|
+inherit|herdar|
+inheritance|herança|
+injure|ferir|
+injury|ferimento|
+injustice|injustiça|
+inn|estalagem, hospedaria|a small hotel
+innocent|inocente|
+inside|dentro|
+insist|insistir|
+instant|instante|
+instead|em vez disso|
+instinct|instinto|
+instrument|instrumento|
+insult|insultar; insulto|
+intelligence|inteligência|
+intelligent|inteligente|
+intend|pretender|
+intention|intenção|
+intently|atentamente|
+interest|interesse; interessar|
+interested|interessado|
+interesting|interessante|
+interruption|interrupção|
+interview|entrevistar|
+into|para dentro de|
+introduce|apresentar|
+invent|inventar|
+invisible|invisível|
+invite|convidar|
+invoice|fatura|
+involve|envolver|
+iron|ferro|
+ironically|ironicamente|
+is|é, está|
+island|ilha|
+islander|ilhéu|
+isolatoe|isolado (palavra de Melville)|a lonely man without a country
+it|isso, ele, ela|
+italian|italiano|
+its|seu, sua (de coisa)|
+itself|si mesmo|
+ivory|marfim|the hard white material of teeth and tusks
+jackal|chacal|
+jacket|jaqueta, casaco|
+jailer|carcereiro|a man who guards a prison
+jar|pote|
+javelin|dardo|
+jaw|mandíbula|
+jealous|ciumento|
+jealousy|ciúme|
+jet|jato|
+jewel|joia|
+job|trabalho|
+join|juntar-se|
+joke|piada; brincar|
+jolly|alegre|
+journal|diário|
+journey|viagem|
+joy|alegria|
+joyously|alegremente|
+judge|juiz; julgar|
+jug|jarra|
+juicy|suculento|
+jump|pular|
+jury|júri|
+just|apenas; justo|
+justice|justiça|
+keel|quilha|the bottom part of a ship
+keep|manter, guardar|
+keeper|guarda, tratador|
+kennel|casinha de cachorro|
+kept|manteve|
+kettle|chaleira|
+key|chave|
+kick|chutar|
+kill|matar|
+killer|assassino (killer whale: orca)|
+kind|tipo; gentil|
+kindly|gentilmente|
+kindness|bondade|
+king|rei|
+kiss|beijar; beijo|
+kitchen|cozinha|
+kitten|gatinho|
+knee|joelho|
+kneel|ajoelhar-se|
+knelt|ajoelhou-se|
+knife|faca|
+knight|cavaleiro|
+knock|bater (à porta)|
+knocker|aldrava|
+knot|nó|
+know|saber, conhecer|
+knowledge|conhecimento|
+known|conhecido|
+kukri|kukri (faca curva)|a large curved knife from Nepal
+l|l|
+label|etiqueta; etiquetar|
+lack|falta; faltar|
+lad|rapaz|
+ladder|escada (de mão)|
+lady|senhora, dama|
+lain|deitado|
+lake|lago|
+lamp|lâmpada, lampião|
+lance|lança|a long spear
+land|terra; pousar|
+landlord|dono da estalagem|
+landscape|paisagem|
+language|língua|
+lantern|lanterna|
+lap|colo|
+lapping|marulho (som da água)|
+large|grande|
+last|último; durar|
+late|tarde; atrasado|
+lately|ultimamente|
+later|mais tarde|
+latin|latim|
+laudanum|láudano|an old medicine made from opium
+laugh|rir|
+laughing|rindo|
+laughter|risada|
+launch|lancha|
+law|lei|
+lawn|gramado|
+lawsuit|processo judicial|
+lawyer|advogado|
+lay|deitar, colocar; parte (do lucro)|
+lazy|preguiçoso|
+lead|liderar, conduzir; chumbo|
+leader|líder|
+leak|vazar; vazamento|
+leaky|que vaza|
+lean|inclinar-se, apoiar-se|
+leap|saltar|
+learn|aprender|
+learning|aprendizado|
+least|menos (at least: pelo menos)|
+leather|couro|
+leave|sair, deixar|
+leech|sanguessuga|
+left|esquerdo; restante|
+leg|perna|
+legal|legal, jurídico|
+legend|lenda|
+lend|emprestar|
+less|menos|
+lesson|lição|
+let|deixar|
+letter|carta; letra|
+level|nível|
