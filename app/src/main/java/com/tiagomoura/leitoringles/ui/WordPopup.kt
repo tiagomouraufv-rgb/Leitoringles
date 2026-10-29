@@ -48,7 +48,10 @@ private sealed class ImgState {
 }
 
 @Composable
-fun WordPopup(app: AppState, book: Book, t: TapTarget, onClose: () -> Unit, onGrammar: (String) -> Unit) {
+fun WordPopup(
+    app: AppState, book: Book, t: TapTarget, onClose: () -> Unit, onGrammar: (String) -> Unit,
+    onImage: (Bitmap, String) -> Unit = { _, _ -> },
+) {
     val chapter = book.chapters[t.chapter]
     val text = chapter.text
     val surface = text.substring(t.start, t.end)
@@ -123,6 +126,10 @@ fun WordPopup(app: AppState, book: Book, t: TapTarget, onClose: () -> Unit, onGr
             if (sentence.isNotBlank()) {
                 Spacer(Modifier.height(10.dp))
                 Text("“$sentence”", fontSize = 15.sp, fontFamily = FontFamily.Serif)
+                val sentencePt = remember(t) { chapter.sentencesIn(t.offset, t.offset + 1).firstOrNull()?.pt }
+                if (sentencePt != null) {
+                    Text(sentencePt, fontSize = 15.sp, color = Grey, modifier = Modifier.padding(top = 2.dp))
+                }
             }
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -158,10 +165,11 @@ fun WordPopup(app: AppState, book: Book, t: TapTarget, onClose: () -> Unit, onGr
                     Spacer(Modifier.height(10.dp))
                     Image(
                         st.bitmap.asImageBitmap(), contentDescription = surface,
-                        modifier = Modifier.fillMaxWidth().heightIn(max = 280.dp).border(1.dp, Ink),
+                        modifier = Modifier.fillMaxWidth().heightIn(max = 280.dp).border(1.dp, Ink)
+                            .tap { onImage(st.bitmap, st.source) },
                         contentScale = ContentScale.Fit,
                     )
-                    Text("Fonte: ${st.source}", fontSize = 12.sp, color = Grey)
+                    Text("Toque na imagem para ver em tela cheia · Fonte: ${st.source}", fontSize = 12.sp, color = Grey)
                 }
             }
 

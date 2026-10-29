@@ -304,7 +304,9 @@ def build(book_id, out_dir):
         pat = r"(?<![A-Za-z])" + re.escape(k).replace(r"\ ", r"\s+").replace("'", "['’]") + r"(?![A-Za-z])"
         expr_patterns.append((k, re.compile(pat, re.IGNORECASE)))
 
+    from sentences import align
     for ci, ch in enumerate(chapters_src):
+        tr = align(book_id, ci, ch)  # sentence translations, or None
         paras_out = []
         per_topic_count = collections.Counter()
         for pi, para in enumerate(ch["paragraphs"]):
@@ -350,7 +352,10 @@ def build(book_id, out_dir):
                         a, b = min(h, ti), max(h, ti)
                         if b - a <= 4:
                             expr_occ["P:" + key].append([ci, pi, toks[a][0], toks[b][1]])
-            paras_out.append({"t": text, "s": para["s"]})
+            po = {"t": text, "s": para["s"]}
+            if tr is not None:
+                po["tr"] = tr[pi]
+            paras_out.append(po)
         chapters.append({"title": ch["title"], "paragraphs": paras_out})
 
     # forms map: surface -> entry key (most frequent)

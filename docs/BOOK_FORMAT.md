@@ -25,6 +25,7 @@ Cada livro é um único arquivo JSON em UTF-8, com extensão `.lib.json` (pode s
 
 - `level`: A1, A2, B1, B2, C1 ou C2 — define a prateleira.
 - `chapters[].paragraphs[].s`: `p` normal, `h` subtítulo, `q` citação/carta, `li` item de lista.
+- `chapters[].paragraphs[].tr` (opcional, recomendado): `[[início, fim, "tradução"], ...]`, uma entrada por frase, posições dentro de `t`. Usado ao selecionar um trecho e no pop-up da palavra. No pipeline deste repositório, as traduções ficam em `books-src/<livro>/pt/NN.txt` (um bloco por parágrafo separado por linha em branco, uma linha por frase) e são alinhadas por `tools/sentences.py`.
 - `lexicon.forms`: cada palavra do texto como aparece (sensível a maiúsculas) → chave de entrada.
 - `lexicon.entries`: chaves `W:<lema>` para palavras e `N:<Nome>` para nomes próprios.
   `pt` tradução, `def` definição simples em inglês (opcional), `pos` classe gramatical,

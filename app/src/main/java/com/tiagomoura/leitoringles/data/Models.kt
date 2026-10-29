@@ -12,7 +12,13 @@ val LEVEL_NAMES = mapOf(
     "C2" to "Proficiente",
 )
 
-data class Paragraph(val text: String, val style: String)
+/** A sentence of a paragraph (offsets inside the paragraph) with its Portuguese translation. */
+data class Sentence(val start: Int, val end: Int, val pt: String)
+
+data class Paragraph(val text: String, val style: String, val tr: List<Sentence> = emptyList())
+
+/** A sentence located in a chapter: offsets inside the chapter text. */
+data class ChapterSentence(val start: Int, val end: Int, val pt: String?)
 
 data class Chapter(val title: String, val paragraphs: List<Paragraph>) {
     /** Text of the whole chapter, paragraphs separated by a blank line. */
@@ -43,6 +49,46 @@ data class Chapter(val title: String, val paragraphs: List<Paragraph>) {
 
     fun offsetOf(paragraph: Int, inPara: Int): Int =
         if (paragraph in paragraphStarts.indices) paragraphStarts[paragraph] + inPara else 0
+
+    val hasTranslation: Boolean get() = paragraphs.any { it.tr.isNotEmpty() }
+
+    /** Sentences that overlap the chapter range [from, to). Uses the book's translations when present. */
+    fun sentencesIn(from: Int, to: Int): List<ChapterSentence> {
+        val out = ArrayList<ChapterSentence>()
+        for (i in paragraphs.indices) {
+            val ps = paragraphStarts[i]
+            val pe = ps + paragraphs[i].text.length
+            if (pe <= from || ps >= to.coerceAtLeast(from + 1)) continue
+            val list = paragraphs[i].tr.ifEmpty {
+                splitSentences(paragraphs[i].text).map { Sentence(it.first, it.last + 1, "") }
+            }
+            for (s in list) {
+                val a = ps + s.start
+                val b = ps + s.end
+                if (b > from && a < to.coerceAtLeast(from + 1)) out.add(ChapterSentence(a, b, s.pt.ifBlank { null }))
+            }
+        }
+        return out
+    }
+}
+
+/** Simple sentence splitter used when a book has no sentence translations. */
+fun splitSentences(text: String): List<IntRange> {
+    val out = ArrayList<IntRange>()
+    val rx = Regex("[.!?…]+[\"”’')\\]]*(?=\\s+[\"“‘'(\\[—–]*[A-Z0-9])")
+    var start = 0
+    for (m in rx.findAll(text)) {
+        val end = m.range.last + 1
+        if (text[m.range.first] == '.') {
+            val w = Regex("([A-Za-z]+)\\.$").find(text.substring(start, m.range.first + 1))?.groupValues?.get(1)
+            if (w != null && (w in setOf("Mr", "Mrs", "Dr", "St", "Prof", "Mt", "No", "Capt", "Mme", "Mlle", "M") || (w.length == 1 && w[0].isUpperCase()))) continue
+        }
+        if (text.substring(start, end).isNotBlank()) out.add(start until end)
+        start = end
+        while (start < text.length && text[start].isWhitespace()) start++
+    }
+    if (start < text.length && text.substring(start).isNotBlank()) out.add(start until text.trimEnd().length)
+    return out
 }
 
 data class Entry(

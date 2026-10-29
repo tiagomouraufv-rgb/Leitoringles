@@ -7,6 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -124,6 +126,14 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
     var page by remember(book) { mutableIntStateOf(0) }
     var panel by remember { mutableStateOf("") } // "", "menu", "text", "parts"
     var tap by remember { mutableStateOf<TapTarget?>(null) }
+    // text selection (chapter offsets): sel is highlighted; selDone opens the translation panel
+    var sel by remember { mutableStateOf<IntRange?>(null) }
+    var selDone by remember { mutableStateOf(false) }
+    var selecting by remember { mutableStateOf(false) }
+    var selAnchor by remember { mutableIntStateOf(0) }
+    var longFired by remember { mutableStateOf(false) }
+    var longPos by remember { mutableStateOf(Offset.Zero) }
+    var fullImage by remember { mutableStateOf<Pair<Bitmap, String>?>(null) }
     var flash by remember { mutableStateOf(false) }
     var turns by remember { mutableIntStateOf(0) }
     val settings = app.settings
@@ -185,6 +195,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
         }
 
         fun goTo(newPage: Int) {
+            sel = null; selDone = false
             page = newPage
             anchor = (pages.startOffset(page) - pages.base).coerceAtLeast(0)
             registerTurn()
@@ -194,6 +205,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
         fun next() {
             if (page + 1 < pages.count) goTo(page + 1)
             else if (chapterIndex + 1 < book.chapters.size) {
+                sel = null; selDone = false
                 chapterIndex += 1; anchor = 0; registerTurn()
             }
         }
@@ -201,6 +213,7 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
         fun prev() {
             if (page > 0) goTo(page - 1)
             else if (chapterIndex > 0) {
+                sel = null; selDone = false
                 chapterIndex -= 1; wantLastPage = true; registerTurn()
             }
         }
@@ -225,8 +238,63 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             return TapTarget(chapterIndex, r.first, r.last + 1, inChapter)
         }
 
+        /** Chapter offset under a point, clamped to the text of the current page. */
+        fun offsetAt(pos: Offset): Int {
+            val top = pages.top(pageNow)
+            val bottom = pages.bottom(pageNow)
+            val yIn = (pos.y - topPx + top).coerceIn(top + 1f, bottom - 1f)
+            val xIn = (pos.x - marginPx).coerceIn(0f, widthPx)
+            val off = pages.layout.getOffsetForPosition(Offset(xIn, yIn)) - pages.base
+            return off.coerceIn(0, book.chapters[chapterIndex].text.length)
+        }
+
+        fun longStart(pos: Offset) {
+            longFired = true
+            if (panel.isNotEmpty() || tap != null || selDone) return
+            longPos = pos
+            selecting = true
+            selAnchor = offsetAt(pos)
+            sel = selAnchor until selAnchor
+        }
+
+        fun longMove(pos: Offset) {
+            if (!selecting) return
+            val o = offsetAt(pos)
+            sel = if (o >= selAnchor) selAnchor until o else o until selAnchor
+        }
+
+        fun longEnd() {
+            if (!selecting) return
+            selecting = false
+            val txt = book.chapters[chapterIndex].text
+            val r = sel ?: return
+            if (r.isEmpty() || r.last - r.first < 1) {
+                if (settings.tapTurnsPage) {
+                    sel = null
+                    tap = hitTest(longPos)
+                    return
+                }
+                // no drag: select the whole sentence
+                val s = book.chapters[chapterIndex].sentencesIn(selAnchor, selAnchor + 1).firstOrNull()
+                if (s == null) { sel = null; return }
+                sel = s.start until s.end
+            } else {
+                // snap to whole words
+                var a = r.first
+                var b = r.last + 1
+                while (a > 0 && txt[a - 1].isLetterOrDigit() || a > 0 && txt[a - 1] == '\'' && a > 1 && txt[a - 2].isLetter()) a--
+                while (b < txt.length && (txt[b].isLetterOrDigit() || txt[b] == '\'' || txt[b] == '’')) b++
+                while (a < b && txt[a].isWhitespace()) a++
+                while (b > a && txt[b - 1].isWhitespace()) b--
+                if (b <= a) { sel = null; return }
+                sel = a until b
+            }
+            selDone = true
+        }
+
         fun handleTap(pos: Offset, long: Boolean) {
-            if (panel.isNotEmpty() || tap != null) return
+            if (longFired) { longFired = false; return }
+            if (panel.isNotEmpty() || tap != null || selDone) return
             if (settings.tapTurnsPage && !long) {
                 if (pos.x < screenW * 0.35f) prev() else next()
                 return
@@ -242,6 +310,10 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
         }
 
         val tapState = rememberUpdatedState(::handleTap)
+        val longStartState = rememberUpdatedState(::longStart)
+        val longMoveState = rememberUpdatedState(::longMove)
+        val longEndState = rememberUpdatedState(::longEnd)
+        val selectingState = rememberUpdatedState(selecting)
         val nextState = rememberUpdatedState(::next)
         val prevState = rememberUpdatedState(::prev)
         DisposableEffect(Unit) {
@@ -262,19 +334,30 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             Modifier.fillMaxSize()
                 .pointerInput(Unit) {
                     detectTapGestures(
+                        onPress = { longFired = false },
                         onTap = { tapState.value(it, false) },
-                        onLongPress = { tapState.value(it, true) },
                     )
                 }
                 .pointerInput(Unit) {
                     var acc = 0f
+                    var ignore = false
                     detectHorizontalDragGestures(
-                        onDragStart = { acc = 0f },
-                        onHorizontalDrag = { change, amount -> acc += amount; change.consume() },
+                        onDragStart = { acc = 0f; ignore = selectingState.value },
+                        onHorizontalDrag = { change, amount -> if (!ignore) { acc += amount; change.consume() } },
                         onDragEnd = {
-                            if (acc < -swipePx) nextState.value() else if (acc > swipePx) prevState.value()
+                            if (!ignore && !selectingState.value) {
+                                if (acc < -swipePx) nextState.value() else if (acc > swipePx) prevState.value()
+                            }
                             acc = 0f
                         },
+                    )
+                }
+                .pointerInput(Unit) {
+                    detectDragGesturesAfterLongPress(
+                        onDragStart = { longStartState.value(it) },
+                        onDrag = { change, _ -> change.consume(); longMoveState.value(change.position) },
+                        onDragEnd = { longEndState.value() },
+                        onDragCancel = { longEndState.value() },
                     )
                 }
         ) {
@@ -282,6 +365,12 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
             val bottom = pages.bottom(pageNow)
             clipRect(left = 0f, top = topPx, right = size.width, bottom = topPx + (bottom - top) + 1f) {
                 translate(left = marginPx, top = topPx - top) {
+                    sel?.let { r ->
+                        if (r.last >= r.first) {
+                            val path = pages.layout.getPathForRange(pages.base + r.first, pages.base + r.last + 1)
+                            drawPath(path, if (color) Color(0xFFB8DCFF) else Color(0xFFC8C8C8))
+                        }
+                    }
                     drawText(pages.layout)
                 }
             }
@@ -346,9 +435,16 @@ private fun BookReader(app: AppState, book: Book, target: Screen.Reader) {
                     tap = null
                     app.grammarFocus = id
                     app.screen = Screen.Grammar
-                })
+                }, onImage = { bmp, src -> fullImage = bmp to src })
             }
         }
+        val selRange = sel
+        if (selDone && selRange != null) {
+            Overlay(onClose = { selDone = false; sel = null }) {
+                SelectionPanel(app, book, chapterIndex, selRange, onClose = { selDone = false; sel = null })
+            }
+        }
+        fullImage?.let { (bmp, src) -> FullImage(bmp, src) { fullImage = null } }
         if (flash) Box(Modifier.fillMaxSize().background(Ink))
     }
 }
@@ -417,7 +513,7 @@ private fun ReaderMenu(
         MenuRow("Biblioteca") { app.screen = Screen.Library }
         Spacer(Modifier.height(10.dp))
         Text(
-            "Toque numa palavra para ver a tradução. Para virar a página: toque nas bordas da tela, deslize, use as setas ‹ › embaixo ou os botões do aparelho. " +
+            "Toque numa palavra para ver a tradução. Para traduzir um trecho, toque, segure e arraste o dedo (segurar sem arrastar seleciona a frase inteira). Para virar a página: toque nas bordas da tela, deslize, use as setas ‹ › embaixo ou os botões do aparelho. " +
                 "Fundo cinza = expressão · sublinhado = ponto de gramática.",
             fontSize = 14.sp, color = Grey,
         )
@@ -485,7 +581,7 @@ fun TextSettings(app: AppState, onClose: () -> Unit) {
                 app.updateSettings(s.copy(tapTurnsPage = !s.tapTurnsPage))
             }
         }
-        if (s.tapTurnsPage) Text("Com \"Vira a página\", toque e segure numa palavra para traduzi-la.", fontSize = 14.sp, color = Grey)
+        if (s.tapTurnsPage) Text("Com \"Vira a página\", toque e segure numa palavra (sem arrastar) para traduzi-la; segure e arraste para traduzir um trecho.", fontSize = 14.sp, color = Grey)
         Text("Atualização completa da tela a cada (páginas):", fontSize = 15.sp, modifier = Modifier.padding(top = 8.dp))
         Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             for (n in listOf(0, 4, 8, 12, 20)) {

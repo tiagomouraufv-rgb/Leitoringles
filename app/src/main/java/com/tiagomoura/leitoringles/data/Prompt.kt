@@ -44,7 +44,7 @@ Gere um único arquivo JSON chamado <id>.lib.json, em UTF-8, exatamente neste fo
   "glossLanguage": "pt-BR",
   "description": "Uma ou duas frases em inglês sobre o livro.",
   "chapters": [
-    {"title": "Part 1 — ...", "paragraphs": [{"t": "Texto do parágrafo.", "s": "p"}]}
+    {"title": "Part 1 — ...", "paragraphs": [{"t": "First sentence. Second one.", "s": "p", "tr": [[0, 15, "Primeira frase."], [16, 27, "Segunda."]]}]}
   ],
   "lexicon": {
     "forms": {"wolves": "W:wolf", "Ahab": "N:Ahab"},
@@ -68,6 +68,7 @@ Gere um único arquivo JSON chamado <id>.lib.json, em UTF-8, exatamente neste fo
 
 Detalhes obrigatórios:
 - "s" do parágrafo: "p" (normal), "h" (subtítulo), "q" (citação/carta) ou "li" (item de lista).
+- "tr" do parágrafo (obrigatório): a tradução para português do Brasil de CADA frase do parágrafo, na ordem, como [início, fim, "tradução"]; início/fim são posições de caracteres da frase dentro de "t" (fim exclusivo). As frases devem cobrir o parágrafo inteiro, sem sobreposição. Títulos e itens de lista também levam "tr" (uma frase). A tradução é natural e fiel, não palavra por palavra.
 - "forms": TODAS as palavras que aparecem no texto, como estão escritas (incluindo plurais, verbos conjugados e palavras com maiúscula no início de frase), apontando para uma entrada de "entries". Chaves das entradas: "W:" + lema em minúsculas, ou "N:" + nome próprio.
 - "entries": uma por lema, com "pt" (tradução para o português do Brasil, com os sentidos usados no livro), "def" (definição simples em inglês, opcional para palavras muito básicas), "pos" (noun, verb, adj, adv, name, pron, prep, conj, det, interj) e "cat" ("verb" para verbos, "word" para o resto). Use "img" em nomes de pessoas reais, lugares, navios e objetos concretos, com o termo exato de busca na Wikipédia em inglês.
 - "occ" das expressões: [capítulo, parágrafo, início, fim], com posições em caracteres dentro do texto do parágrafo (contando a partir de 0; o fim não é incluído). Inclua phrasal verbs ("type": "phrasal") e expressões fixas ("type": "expression").

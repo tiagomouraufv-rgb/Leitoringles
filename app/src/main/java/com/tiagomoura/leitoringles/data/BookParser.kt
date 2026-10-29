@@ -54,7 +54,15 @@ object BookParser {
             val paras = ArrayList<Paragraph>(ps.length())
             for (j in 0 until ps.length()) {
                 val p = ps.get(j)
-                if (p is JSONObject) paras.add(Paragraph(p.optString("t"), p.optString("s", "p")))
+                if (p is JSONObject) {
+                    val tr = ArrayList<Sentence>()
+                    val ta = p.optJSONArray("tr")
+                    if (ta != null) for (k in 0 until ta.length()) {
+                        val s = ta.optJSONArray(k) ?: continue
+                        if (s.length() >= 3) tr.add(Sentence(s.optInt(0), s.optInt(1), s.optString(2)))
+                    }
+                    paras.add(Paragraph(p.optString("t"), p.optString("s", "p"), tr))
+                }
                 else paras.add(Paragraph(p.toString(), "p"))
             }
             out.add(Chapter(c.optString("title"), paras))
